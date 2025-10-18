@@ -1,1 +1,1 @@
-npx husky add .husky/pre-commit "npm version minor --no-git-tag-version && git add package.json package-lock.json"
+npx husky add "npm version minor --no-git-tag-version && git add package.json package-lock.json"
