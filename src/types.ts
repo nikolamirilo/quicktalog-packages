@@ -56,7 +56,7 @@ export type Catalogue = {
   source?: string;
 };
 
-export type ServicesFormData = Omit<Catalogue, "id" | "created_by" | "">;
+export type CatalogueFormData = Omit<Catalogue, "id" | "created_by" | "">;
 
 export type Legal = {
   name?: string;
