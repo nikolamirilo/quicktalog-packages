@@ -1,6 +1,6 @@
 import { layouts, themes } from "./constants";
 
-export type Status = "active" | "inactive" | "draft";
+export type Status = "active" | "inactive" | "draft" | "in preparation";
 
 export type CookiePreferences = {
   accepted: boolean;
