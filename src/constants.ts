@@ -35,8 +35,15 @@ export const themes = [
     type: "dark",
   },
   {
-    key: "theme-advent",
-    label: "Advent",
+    key: "theme-advent-1",
+    label: "Advent 1",
+    description:
+      "A warm and festive theme inspired by the spirit of anticipation and celebration. Advent combines cozy winter tones, gentle contrasts, and elegant typography to evoke a sense of calm preparation and joyful expectation. Ideal for holiday campaigns, seasonal landing pages, or storytelling experiences that blend warmth, tradition, and modern simplicity.",
+    type: "light",
+  },
+  {
+    key: "theme-advent-2",
+    label: "Advent 2",
     description:
       "A warm and festive theme inspired by the spirit of anticipation and celebration. Advent combines cozy winter tones, gentle contrasts, and elegant typography to evoke a sense of calm preparation and joyful expectation. Ideal for holiday campaigns, seasonal landing pages, or storytelling experiences that blend warmth, tradition, and modern simplicity.",
     type: "dark",
