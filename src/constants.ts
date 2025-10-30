@@ -13,7 +13,7 @@ export const themes = [
     label: "Advent 2",
     description:
       "A warm and festive theme inspired by the spirit of anticipation and celebration. Advent combines cozy winter tones, gentle contrasts, and elegant typography to evoke a sense of calm preparation and joyful expectation. Ideal for holiday campaigns, seasonal landing pages, or storytelling experiences that blend warmth, tradition, and modern simplicity.",
-    type: "dark",
+    type: "light",
   },
   {
     id: 3,
@@ -87,6 +87,4 @@ export const layouts = [
       "Carousel layout: Catalogue items are displayed in a horizontal scrollable carousel, allowing users to swipe or scroll through items. Great for featured items or visually rich catalogues.",
   },
 ];
-
-export const DARK_THEMES = ["theme-elegant", "theme-modern", "theme-creative"];
 export const DEFAULT_EMAIL = "quicktalog@outlook.com";
