@@ -19,7 +19,7 @@ export type CookiePreferences = {
 export type CategoryItem = {
   name: string;
   description: string;
-  price: number;
+  price: string;
   image: string;
 };
 
