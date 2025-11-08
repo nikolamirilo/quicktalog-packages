@@ -1,6 +1,7 @@
 {
   "name": "@quicktalog/common",
   "version": "1.13.0",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
