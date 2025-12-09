@@ -17,6 +17,14 @@ export const themes = [
   },
   {
     id: 3,
+    key: "theme-monochrome",
+    label: "Monochrome",
+    description:
+      "A high-contrast, minimalist look focused on clarity and modern professionalism. Ideal for products that value simplicity, readability, and a timeless aesthetic.",
+    type: "light",
+  },
+  {
+    id: 4,
     key: "theme-elegant",
     label: "Elegant",
     description:
@@ -24,7 +32,7 @@ export const themes = [
     type: "dark",
   },
   {
-    id: 4,
+    id: 5,
     key: "theme-organic",
     label: "Organic",
     description:
@@ -32,7 +40,7 @@ export const themes = [
     type: "light",
   },
   {
-    id: 5,
+    id: 6,
     key: "theme-modern",
     label: "Modern",
     description:
@@ -40,7 +48,7 @@ export const themes = [
     type: "dark",
   },
   {
-    id: 6,
+    id: 7,
     key: "theme-luxury",
     label: "Luxury",
     description:
@@ -48,7 +56,7 @@ export const themes = [
     type: "light",
   },
   {
-    id: 7,
+    id: 8,
     key: "theme-creative",
     label: "Creative",
     description:
