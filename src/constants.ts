@@ -69,28 +69,28 @@ export const layouts = [
   {
     key: "variant_1",
     label: "Side Image",
-    image: "/layouts/layout_1v_2.jpg",
+    image: "/layouts/variant_1.jpg",
     description:
       "Grid layout: Catalogue items are displayed in a responsive grid (1 column on mobile, 2 on desktop), with images and details shown together. Best for balanced, easy-to-browse catalogues.",
   },
   {
     key: "variant_2",
     label: "Top Image",
-    image: "/layouts/layout_2v_2.jpg",
+    image: "/layouts/variant_2.jpg",
     description:
       "Horizontal card layout: Catalogue items are arranged in flexible horizontal cards, wrapping as needed. Ideal for showcasing items with wide images or for a modern, card-based look.",
   },
   {
     key: "variant_3",
     label: "Text Only",
-    image: "/layouts/layout_3v_2.jpg",
+    image: "/layouts/variant_3.jpg",
     description:
       "Alternative grid layout: Similar to Layout 1 but with subtle style differences, such as spacing or card appearance. Useful for catalogues needing a slightly different grid presentation. This layout does not contain image.",
   },
   {
     key: "variant_4",
     label: "Carousel",
-    image: "/layouts/layout_4v_2.jpg",
+    image: "/layouts/variant_4.jpg",
     description:
       "Carousel layout: Catalogue items are displayed in a horizontal scrollable carousel, allowing users to swipe or scroll through items. Great for featured items or visually rich catalogues.",
   },
