@@ -64,7 +64,6 @@ export const themes = [
     type: "dark",
   },
 ];
-
 export const layouts = [
   {
     key: "variant_1",
