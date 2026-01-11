@@ -1,4 +1,4 @@
-import { catalogues } from "../drizzle";
+import { schema } from "../drizzle";
 import { type InferSelectModel } from "drizzle-orm";
 import {
 	AnimationLevel,
@@ -12,7 +12,7 @@ import {
 } from "./enums";
 import { Update } from "./functions";
 
-type RawCatalogue = InferSelectModel<typeof catalogues>;
+type RawCatalogue = InferSelectModel<typeof schema.catalogues>;
 
 export type Catalogue = Update<
 	RawCatalogue,

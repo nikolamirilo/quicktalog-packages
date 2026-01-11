@@ -1,4 +1,4 @@
-import { users } from "../drizzle";
+import { schema } from "../drizzle";
 import { layouts, themes } from "../constants";
 import { InferSelectModel, Update } from "drizzle-orm";
 
@@ -76,7 +76,7 @@ export type CookiePreferences = {
   version: string;
 };
 
-type RawUser = InferSelectModel<typeof users>;
+type RawUser = InferSelectModel<typeof schema.users>;
 
 export type User = Update<
   RawUser,
