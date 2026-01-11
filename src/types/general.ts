@@ -67,21 +67,13 @@ export type Analytics = {
   unique_visitors: number;
 };
 
-export type CookiePreferences = {
-  accepted: boolean;
-  essential: boolean;
-  analytics: boolean;
-  marketing: boolean;
-  timestamp: string;
-  version: string;
-};
-
 type RawUser = InferSelectModel<typeof schema.users>;
 
 export type User = Update<
   RawUser,
   {
     cookiePreferences: CookiePreferences;
+    consents: Consents
   }
 >;
 
@@ -118,3 +110,19 @@ export type AreLimitesReached = {
   ocr: boolean;
   prompts: boolean;
 };
+
+
+export type CookiePreferences = {
+  accepted: boolean;
+  essential: boolean;
+  analytics: boolean;
+  marketing: boolean;
+  timestamp: string;
+  version: string;
+};
+
+export type Consents = {
+  termsAndConditions: string;
+  privacyPolicy: string;
+  refundPolicy: string;
+}
