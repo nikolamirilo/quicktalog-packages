@@ -10,15 +10,15 @@ export const prompts = pgTable("prompts", {
 	catalogue: text().notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.catalogue],
-		foreignColumns: [catalogues.name],
-		name: "prompts_catalogue_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.catalogue],
+			foreignColumns: [catalogues.name],
+			name: "prompts_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 	foreignKey({
-		columns: [table.userId],
-		foreignColumns: [users.id],
-		name: "prompts_user_id_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "prompts_user_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
 export const users = pgTable("users", {
@@ -30,7 +30,7 @@ export const users = pgTable("users", {
 	planId: text("plan_id"),
 	customerId: text("customer_id"),
 	cookiePreferences: jsonb("cookie_preferences"),
-	consents: jsonb().default({ "refund-policy": true, "privacy-policy": true, "terms-and-conditions": true }).notNull(),
+	consents: jsonb().default({"refund-policy":true,"privacy-policy":true,"terms-and-conditions":true}).notNull(),
 }, (table) => [
 	pgPolicy("Enable read access for authenticated users to users", { as: "permissive", for: "select", to: ["authenticated"], using: sql`true` }),
 ]);
@@ -42,10 +42,10 @@ export const newsletter = pgTable("newsletter", {
 	ownerId: text("owner_id").notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.ownerId],
-		foreignColumns: [users.id],
-		name: "newsletter_owner_id_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.ownerId],
+			foreignColumns: [users.id],
+			name: "newsletter_owner_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
 export const ocr = pgTable("ocr", {
@@ -55,15 +55,15 @@ export const ocr = pgTable("ocr", {
 	catalogue: text().notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.catalogue],
-		foreignColumns: [catalogues.name],
-		name: "ocr_catalogue_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.catalogue],
+			foreignColumns: [catalogues.name],
+			name: "ocr_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 	foreignKey({
-		columns: [table.userId],
-		foreignColumns: [users.id],
-		name: "ocr_user_id_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "ocr_user_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
 export const subscriptions = pgTable("subscriptions", {
@@ -103,10 +103,10 @@ export const analytics = pgTable("analytics", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.userId],
-		foreignColumns: [users.id],
-		name: "analytics_user_id_fkey"
-	}),
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "analytics_user_id_fkey"
+		}),
 	unique("analytics_unique_entry").on(table.date, table.currentUrl),
 ]);
 
@@ -118,10 +118,10 @@ export const qrConfigs = pgTable("qr_configs", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
 }, (table) => [
 	foreignKey({
-		columns: [table.catalogue],
-		foreignColumns: [catalogues.name],
-		name: "qr_configs_catalogue_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.catalogue],
+			foreignColumns: [catalogues.name],
+			name: "qr_configs_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 	unique("qr_configs_catalogue_key").on(table.catalogue),
 ]);
 
@@ -149,9 +149,9 @@ export const catalogues = pgTable("catalogues", {
 	createdBy: text("created_by").notNull(),
 }, (table) => [
 	foreignKey({
-		columns: [table.createdBy],
-		foreignColumns: [users.id],
-		name: "catalogues_created_by_fkey"
-	}).onUpdate("cascade").onDelete("cascade"),
+			columns: [table.createdBy],
+			foreignColumns: [users.id],
+			name: "catalogues_created_by_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 	unique("catalogues_name_key").on(table.name),
 ]);
