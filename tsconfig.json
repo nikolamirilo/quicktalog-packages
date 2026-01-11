@@ -6,8 +6,13 @@
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   },
-  "include": ["src"],
-  "exclude": ["dist"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist"
+  ]
 }

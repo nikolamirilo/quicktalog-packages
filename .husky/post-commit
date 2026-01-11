@@ -1,0 +1,2 @@
+npx drizzle-kit pull
+npm run build

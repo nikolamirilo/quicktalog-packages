@@ -1,4 +1,4 @@
-import { PricingPlan } from "./types";
+import { PricingPlan } from "../types/general";
 
 export const tiers: PricingPlan[] = [
   {
