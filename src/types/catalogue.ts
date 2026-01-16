@@ -3,7 +3,6 @@ import { type InferSelectModel } from "drizzle-orm";
 import {
   AnimationLevel,
   ContentLayout,
-  FontFamily,
   FontSize,
   ShadowLevel,
   Source,
@@ -111,7 +110,7 @@ export type Appearance = {
   };
   style: {
     contentFontSize: FontSize;
-    fontFamily: FontFamily;
+    fontFamily: string;
     borderRadius: number;
     animation: AnimationLevel;
     shadow: ShadowLevel;
