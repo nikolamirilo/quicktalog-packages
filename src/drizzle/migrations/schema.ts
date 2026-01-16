@@ -130,7 +130,6 @@ export const catalogues = pgTable("catalogues", {
 	name: text().notNull(),
 	logo: text(),
 	heading: text(),
-	description: text(),
 	status: text().default('draft').notNull(),
 	source: text().default('builder').notNull(),
 	language: text().default('en').notNull(),
@@ -147,6 +146,7 @@ export const catalogues = pgTable("catalogues", {
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdBy: text("created_by").notNull(),
+	metadata: jsonb().default({}),
 }, (table) => [
 	foreignKey({
 			columns: [table.createdBy],
