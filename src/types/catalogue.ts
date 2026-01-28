@@ -1,5 +1,5 @@
-import { schema } from "../drizzle";
 import { type InferSelectModel } from "drizzle-orm";
+import { schema } from "../drizzle";
 import {
   AnimationLevel,
   ContentLayout,
@@ -40,6 +40,20 @@ export type BaseContentBlock = {
   order: number;
 };
 
+
+
+export type DividerBlock = BaseContentBlock & {
+  type: "divider";
+  spacing: number // rem
+  border?: {
+    isEnabled: boolean
+    style?: "solid" | "dashed" | "dotted"
+    thickness?: number // px
+    color?: string
+    opacity?: number //0-100
+  }
+};
+
 export type CategoryBlock = BaseContentBlock & {
   type: "category";
   name: string;
@@ -76,7 +90,9 @@ export type ContentBlock =
   | ContainerBlock
   | IframeBlock
   | CustomCodeBlock
-  | TextBlock;
+  | TextBlock
+  | DividerBlock
+  ;
 
 export type ItemDiscount = {
   isOnDiscount: boolean;
