@@ -21,8 +21,17 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
-      categories_per_catalogue: 3,
+      blocks_per_catalogue: 3,
+      blocks: {
+        divider: false,
+        iframe: false,
+        customCode: false,
+      },
       items_per_catalogue: 15,
+      apperance: {
+        standardThemes: true,
+        styles: false,
+      },
     },
   },
   {
@@ -40,12 +49,21 @@ export const tiers: PricingPlan[] = [
       newsletter: false,
       ocr_ai_import: 0,
       traffic_limit: 2000,
+      blocks: {
+        divider: true,
+        iframe: false,
+        customCode: false,
+      },
       branding: true,
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
-      categories_per_catalogue: 6,
+      blocks_per_catalogue: 6,
       items_per_catalogue: 30,
+      apperance: {
+        standardThemes: true,
+        styles: false,
+      },
     },
   },
   {
@@ -67,8 +85,17 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 10,
-      categories_per_catalogue: 15,
+      blocks: {
+        divider: true,
+        iframe: true,
+        customCode: false,
+      },
+      blocks_per_catalogue: 15,
       items_per_catalogue: 100,
+      apperance: {
+        standardThemes: true,
+        styles: true,
+      },
     },
   },
   {
@@ -89,9 +116,18 @@ export const tiers: PricingPlan[] = [
       branding: true,
       custom_features: false,
       analytics: "Advanced",
+      blocks: {
+        divider: true,
+        iframe: true,
+        customCode: true,
+      },
       ai_prompts: 25,
-      categories_per_catalogue: 30,
+      blocks_per_catalogue: 30,
       items_per_catalogue: 200,
+      apperance: {
+        standardThemes: true,
+        styles: true,
+      },
     },
   },
   {
@@ -112,9 +148,18 @@ export const tiers: PricingPlan[] = [
       branding: true,
       custom_features: true,
       analytics: "Advanced",
+      blocks: {
+        divider: true,
+        iframe: true,
+        customCode: true,
+      },
       ai_prompts: 50,
-      categories_per_catalogue: 50,
+      blocks_per_catalogue: 50,
       items_per_catalogue: 300,
+      apperance: {
+        standardThemes: true,
+        styles: true,
+      },
     },
   },
   {
@@ -134,10 +179,19 @@ export const tiers: PricingPlan[] = [
       traffic_limit: 4000,
       branding: true,
       custom_features: false,
+      blocks: {
+        divider: true,
+        iframe: true,
+        customCode: false,
+      },
       analytics: "Basic",
       ai_prompts: 0,
-      categories_per_catalogue: 20,
+      blocks_per_catalogue: 20,
       items_per_catalogue: 200,
+      apperance: {
+        standardThemes: true,
+        styles: true,
+      },
     },
   },
 ];

@@ -1,13 +1,13 @@
 import { type InferSelectModel } from "drizzle-orm";
 import { schema } from "../drizzle";
 import {
-  AnimationLevel,
-  ContentLayout,
-  FontSize,
-  ShadowLevel,
-  Source,
-  Status,
-  ThemeType,
+    AnimationLevel,
+    ContentLayout,
+    FontSize,
+    ShadowLevel,
+    Source,
+    Status,
+    ThemeType,
 } from "./enums";
 import { Update } from "./functions";
 
@@ -39,8 +39,6 @@ export type BaseContentBlock = {
   id: string;
   order: number;
 };
-
-
 
 export type DividerBlock = BaseContentBlock & {
   type: "divider";
@@ -91,8 +89,7 @@ export type ContentBlock =
   | IframeBlock
   | CustomCodeBlock
   | TextBlock
-  | DividerBlock
-  ;
+  | DividerBlock;
 
 export type ItemDiscount = {
   isOnDiscount: boolean;

@@ -27,6 +27,13 @@ export type PricingPlan = {
   features: {
     support: string;
     catalogues: number;
+    blocks_per_catalogue?: number | "unlimited";
+    items_per_catalogue?: number | "unlimited";
+    blocks: {
+      divider: boolean;
+      iframe: boolean;
+      customCode: boolean;
+    };
     newsletter: boolean;
     custom_features: boolean;
     ocr_ai_import: number;
@@ -34,8 +41,10 @@ export type PricingPlan = {
     branding: boolean;
     analytics: string;
     ai_prompts: number;
-    categories_per_catalogue?: number | "unlimited";
-    items_per_catalogue?: number | "unlimited";
+    apperance: {
+      standardThemes: boolean;
+      styles: boolean;
+    };
   };
   billing_period?: "month" | "year";
 };
@@ -73,7 +82,7 @@ export type User = Update<
   RawUser,
   {
     cookiePreferences: CookiePreferences;
-    consents: Consents
+    consents: Consents;
   }
 >;
 
@@ -111,7 +120,6 @@ export type AreLimitesReached = {
   prompts: boolean;
 };
 
-
 export type CookiePreferences = {
   accepted: boolean;
   essential: boolean;
@@ -125,4 +133,4 @@ export type Consents = {
   termsAndConditions: string;
   privacyPolicy: string;
   refundPolicy: string;
-}
+};
