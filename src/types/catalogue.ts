@@ -1,13 +1,12 @@
 import { type InferSelectModel } from "drizzle-orm";
 import { schema } from "../drizzle";
 import {
-    AnimationLevel,
-    ContentLayout,
-    FontSize,
-    ShadowLevel,
-    Source,
-    Status,
-    ThemeType,
+  ContentLayout,
+  FontSize,
+  ShadowLevel,
+  Source,
+  Status,
+  ThemeType,
 } from "./enums";
 import { Update } from "./functions";
 
@@ -125,7 +124,6 @@ export type Appearance = {
     contentFontSize: FontSize;
     fontFamily: string;
     borderRadius: number;
-    animation: AnimationLevel;
     shadow: ShadowLevel;
   };
   overlay: {
