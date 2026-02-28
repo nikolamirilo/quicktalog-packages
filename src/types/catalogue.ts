@@ -41,14 +41,14 @@ export type BaseContentBlock = {
 
 export type DividerBlock = BaseContentBlock & {
   type: "divider";
-  spacing: number // rem
+  spacing: number; // rem
   border?: {
-    isEnabled: boolean
-    style?: "solid" | "dashed" | "dotted"
-    thickness?: number // px
-    color?: string
-    opacity?: number //0-100
-  }
+    isEnabled: boolean;
+    style?: "solid" | "dashed" | "dotted";
+    thickness?: number; // px
+    color?: string;
+    opacity?: number; //0-100
+  };
 };
 
 export type CategoryBlock = BaseContentBlock & {
@@ -159,5 +159,6 @@ export type Header = {
 export type Contact = {
   phone: string;
   email: string;
+  website: string;
   socials: string[];
 };
