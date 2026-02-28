@@ -1,4 +1,4 @@
-import { pgTable, foreignKey, uuid, timestamp, text, pgPolicy, jsonb, integer, unique, serial } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, uuid, timestamp, text, pgPolicy, jsonb, unique, integer, serial } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -84,15 +84,6 @@ export const productNewsletter = pgTable("product_newsletter", {
 	email: text().notNull(),
 });
 
-export const jobLogs = pgTable("job_logs", {
-	jobName: text("job_name").notNull(),
-	status: text().notNull(),
-	executionTimeMs: integer("execution_time_ms"),
-	log: text(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
-	id: uuid().defaultRandom().primaryKey().notNull(),
-});
-
 export const analytics = pgTable("analytics", {
 	date: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	currentUrl: text("current_url").notNull(),
@@ -109,6 +100,15 @@ export const analytics = pgTable("analytics", {
 		}),
 	unique("analytics_unique_entry").on(table.date, table.currentUrl),
 ]);
+
+export const jobLogs = pgTable("job_logs", {
+	jobName: text("job_name").notNull(),
+	status: text().notNull(),
+	executionTimeMs: integer("execution_time_ms"),
+	log: text(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	id: uuid().defaultRandom().primaryKey().notNull(),
+});
 
 export const qrConfigs = pgTable("qr_configs", {
 	id: serial().primaryKey().notNull(),
