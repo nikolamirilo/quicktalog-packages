@@ -31,7 +31,7 @@ export type PricingPlan = {
     items_per_catalogue?: number | "unlimited";
     blocks: {
       divider: boolean;
-      iframe: boolean;
+      embedding: boolean;
       customCode: boolean;
     };
     newsletter: boolean;

@@ -16,7 +16,7 @@ export type Source = "builder" | "ocr_import" | "ai_prompt";
 export type ContentBlockType =
   | "category"
   | "container"
-  | "iframe"
+  | "embedding"
   | "custom_code"
   | "text";
 export type ThemeType = "standard" | "custom";
