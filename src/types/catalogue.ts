@@ -66,10 +66,9 @@ export type ContainerBlock = BaseContentBlock & {
   items: Item[];
 };
 
-export type IframeBlock = BaseContentBlock & {
-  type: "iframe";
-  heading?: string;
-  src: string;
+export type EmbeddingBlock = BaseContentBlock & {
+  type: "embedding";
+  code: string;
 };
 
 export type CustomCodeBlock = BaseContentBlock & {
@@ -85,7 +84,7 @@ export type TextBlock = BaseContentBlock & {
 export type ContentBlock =
   | CategoryBlock
   | ContainerBlock
-  | IframeBlock
+  | EmbeddingBlock
   | CustomCodeBlock
   | TextBlock
   | DividerBlock;
