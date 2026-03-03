@@ -21,7 +21,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
-      blocks_per_catalogue: 3,
+      blocks_per_catalogue: 5,
       blocks: {
         divider: false,
         embedding: false,
@@ -58,7 +58,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
-      blocks_per_catalogue: 6,
+      blocks_per_catalogue: 8,
       items_per_catalogue: 30,
       apperance: {
         standardThemes: true,
