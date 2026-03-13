@@ -144,6 +144,7 @@ export type Partner = {
 };
 
 export type Footer = {
+  type: "default" | "custom";
   cta: CTAButton;
   newsletter: boolean;
   showPartners: boolean;
@@ -154,6 +155,7 @@ export type Footer = {
 };
 
 export type Header = {
+  type: "default" | "custom";
   cta: CTAButton;
   emailCta: boolean;
   phoneCta: boolean;
