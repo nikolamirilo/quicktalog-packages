@@ -147,12 +147,20 @@ export type Footer = {
   cta: CTAButton;
   newsletter: boolean;
   showPartners: boolean;
+  logoSize: {
+    width: number;
+    height: number;
+  };
 };
 
 export type Header = {
   cta: CTAButton;
   emailCta: boolean;
   phoneCta: boolean;
+  logoSize: {
+    width: number;
+    height: number;
+  };
 };
 
 export type Contact = {
