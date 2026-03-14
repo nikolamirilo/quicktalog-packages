@@ -1,6 +1,6 @@
 import { Catalogue } from "../types";
 
-export const defaultCatalogueData: Omit<Catalogue, "id" | "createdBy"> = {
+export const defaultCatalogueData: Omit<Catalogue, "id"> = {
   name: "",
   logo: "",
   status: "draft",
@@ -70,6 +70,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id" | "createdBy"> = {
     newsletter: false,
     showPartners: false,
   },
+  createdBy: "",
   createdAt: new Date().toString(),
   updatedAt: new Date().toString(),
   source: "builder",
