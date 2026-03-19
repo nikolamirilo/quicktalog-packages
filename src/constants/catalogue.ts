@@ -45,8 +45,8 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
   header: {
     type: "default",
     logoSize: {
-      width: 160,
-      height: 160,
+      width: 100,
+      height: 100,
     },
     cta: {
       isEnabled: true,
@@ -59,8 +59,8 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
   footer: {
     type: "default",
     logoSize: {
-      width: 160,
-      height: 160,
+      width: 100,
+      height: 100,
     },
     cta: {
       isEnabled: true,
