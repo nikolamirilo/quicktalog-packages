@@ -35,19 +35,6 @@ export const users = pgTable("users", {
 	pgPolicy("Enable read access for authenticated users to users", { as: "permissive", for: "select", to: ["authenticated"], using: sql`true` }),
 ]);
 
-export const newsletter = pgTable("newsletter", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	email: text().notNull(),
-	catalogueId: uuid("catalogue_id").notNull(),
-	ownerId: text("owner_id").notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.ownerId],
-			foreignColumns: [users.id],
-			name: "newsletter_owner_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-]);
-
 export const ocr = pgTable("ocr", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
@@ -77,6 +64,20 @@ export const subscriptions = pgTable("subscriptions", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	pgPolicy("Enable read access for authenticated users to subscriptions", { as: "permissive", for: "select", to: ["authenticated"], using: sql`true` }),
+]);
+
+export const newsletter = pgTable("newsletter", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	email: text().notNull(),
+	catalogueId: uuid("catalogue_id").notNull(),
+	ownerId: text("owner_id").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.ownerId],
+			foreignColumns: [users.id],
+			name: "newsletter_owner_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
 export const productNewsletter = pgTable("product_newsletter", {
@@ -135,7 +136,6 @@ export const catalogues = pgTable("catalogues", {
 	language: text().default('en').notNull(),
 	currency: text().default('EUR').notNull(),
 	businessType: text("business_type"),
-	tags: text().array().default([""]),
 	content: jsonb().default([]).notNull(),
 	legal: jsonb().default({}).notNull(),
 	appearance: jsonb().default({}).notNull(),
@@ -147,6 +147,7 @@ export const catalogues = pgTable("catalogues", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	createdBy: text("created_by").notNull(),
 	metadata: jsonb().default({}),
+	tags: text().array().default([""]).notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.createdBy],

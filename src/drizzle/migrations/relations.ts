@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { catalogues, prompts, users, newsletter, ocr, analytics, qrConfigs } from "./schema";
+import { catalogues, prompts, users, ocr, newsletter, analytics, qrConfigs } from "./schema";
 
 export const promptsRelations = relations(prompts, ({one}) => ({
 	catalogue: one(catalogues, {
@@ -24,17 +24,10 @@ export const cataloguesRelations = relations(catalogues, ({one, many}) => ({
 
 export const usersRelations = relations(users, ({many}) => ({
 	prompts: many(prompts),
-	newsletters: many(newsletter),
 	ocrs: many(ocr),
+	newsletters: many(newsletter),
 	analytics: many(analytics),
 	catalogues: many(catalogues),
-}));
-
-export const newsletterRelations = relations(newsletter, ({one}) => ({
-	user: one(users, {
-		fields: [newsletter.ownerId],
-		references: [users.id]
-	}),
 }));
 
 export const ocrRelations = relations(ocr, ({one}) => ({
@@ -44,6 +37,13 @@ export const ocrRelations = relations(ocr, ({one}) => ({
 	}),
 	user: one(users, {
 		fields: [ocr.userId],
+		references: [users.id]
+	}),
+}));
+
+export const newsletterRelations = relations(newsletter, ({one}) => ({
+	user: one(users, {
+		fields: [newsletter.ownerId],
 		references: [users.id]
 	}),
 }));

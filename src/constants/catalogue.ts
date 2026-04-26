@@ -79,12 +79,11 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
 };
 
 export const BUSINESS_TYPES = [
-  { value: "restaurant", label: "Restaurant" },
-  { value: "cafe", label: "Cafe" },
-  { value: "bar", label: "Bar" },
-  { value: "bakery", label: "Bakery" },
-  { value: "food-truck", label: "Food Truck" },
-  { value: "catering", label: "Catering" },
+  { value: "food-beverage", label: "Food & Beverage" },
+  { value: "beauty-wellness", label: "Beauty & Wellness" },
+  { value: "retail", label: "Retail" },
+  { value: "online-sales", label: "Online Sales" },
+  { value: "services", label: "Services" },
   { value: "other", label: "Other" },
 ];
 
