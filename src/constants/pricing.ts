@@ -22,7 +22,7 @@ export const tiers: PricingPlan[] = [
       analytics: "Basic",
       ai_prompts: 0,
       sections_per_catalogue: 5,
-      blocks: {
+      sections: {
         divider: false,
         embedding: false,
         customCode: false,
@@ -49,7 +49,7 @@ export const tiers: PricingPlan[] = [
       newsletter: false,
       ocr_ai_import: 0,
       traffic_limit: 2000,
-      blocks: {
+      sections: {
         divider: true,
         embedding: false,
         customCode: false,
@@ -85,7 +85,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 10,
-      blocks: {
+      sections: {
         divider: true,
         embedding: true,
         customCode: false,
@@ -116,7 +116,7 @@ export const tiers: PricingPlan[] = [
       branding: true,
       custom_features: false,
       analytics: "Advanced",
-      blocks: {
+      sections: {
         divider: true,
         embedding: true,
         customCode: true,
@@ -148,7 +148,7 @@ export const tiers: PricingPlan[] = [
       branding: true,
       custom_features: true,
       analytics: "Advanced",
-      blocks: {
+      sections: {
         divider: true,
         embedding: true,
         customCode: true,
@@ -179,7 +179,7 @@ export const tiers: PricingPlan[] = [
       traffic_limit: 4000,
       branding: true,
       custom_features: false,
-      blocks: {
+      sections: {
         divider: true,
         embedding: true,
         customCode: false,

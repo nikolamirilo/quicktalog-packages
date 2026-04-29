@@ -29,7 +29,7 @@ export type PricingPlan = {
     catalogues: number;
     sections_per_catalogue?: number | "unlimited";
     items_per_catalogue?: number | "unlimited";
-    blocks: {
+    sections: {
       divider: boolean;
       embedding: boolean;
       customCode: boolean;
