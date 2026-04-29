@@ -4,7 +4,7 @@ export type LimitType =
   | "catalogue"
   | "traffic"
   | "items"
-  | "categories"
+  | "blocks"
   | "notFound";
 export type Status =
   | "active"
