@@ -27,7 +27,7 @@ export type PricingPlan = {
   features: {
     support: string;
     catalogues: number;
-    blocks_per_catalogue?: number | "unlimited";
+    sections_per_catalogue?: number | "unlimited";
     items_per_catalogue?: number | "unlimited";
     blocks: {
       divider: boolean;
