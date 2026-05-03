@@ -63,6 +63,22 @@ export const themes = [
       "A vibrant, artistic theme with dark backgrounds, bright accent colors (red, yellow, blue), and playful, bold typography. Great for creative spaces, cafes, or venues wanting a fun, expressive look.",
     type: "dark",
   },
+  {
+    id: 9,
+    key: "theme-coffee",
+    label: "Coffee",
+    type: "light",
+    description:
+      "A warm, inviting theme with rich brown tones, cream accents, and cozy typography. Perfect for coffee shops or cafes seeking a comforting, rustic vibe.",
+  },
+  {
+    id: 10,
+    key: "theme-vintage",
+    label: "Vintage",
+    type: "light",
+    description:
+      "A classic, timeless theme with warm earth tones, cream accents, and vintage-inspired typography. Ideal for establishments seeking a nostalgic, charming atmosphere.",
+  },
 ];
 export const layouts = [
   {
