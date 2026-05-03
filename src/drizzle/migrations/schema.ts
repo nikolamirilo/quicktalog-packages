@@ -35,6 +35,31 @@ export const users = pgTable("users", {
 	pgPolicy("Enable read access for authenticated users to users", { as: "permissive", for: "select", to: ["authenticated"], using: sql`true` }),
 ]);
 
+export const subscriptions = pgTable("subscriptions", {
+	subscriptionId: text("subscription_id").primaryKey().notNull(),
+	subscriptionStatus: text("subscription_status").notNull(),
+	priceId: text("price_id"),
+	productId: text("product_id"),
+	scheduledChange: text("scheduled_change"),
+	customerId: text("customer_id").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+});
+
+export const newsletter = pgTable("newsletter", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	email: text().notNull(),
+	catalogueId: uuid("catalogue_id").notNull(),
+	ownerId: text("owner_id").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.ownerId],
+			foreignColumns: [users.id],
+			name: "newsletter_owner_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
+]);
+
 export const ocr = pgTable("ocr", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
@@ -50,33 +75,6 @@ export const ocr = pgTable("ocr", {
 			columns: [table.userId],
 			foreignColumns: [users.id],
 			name: "ocr_user_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-]);
-
-export const subscriptions = pgTable("subscriptions", {
-	subscriptionId: text("subscription_id").primaryKey().notNull(),
-	subscriptionStatus: text("subscription_status").notNull(),
-	priceId: text("price_id"),
-	productId: text("product_id"),
-	scheduledChange: text("scheduled_change"),
-	customerId: text("customer_id").notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	pgPolicy("Enable read access for authenticated users to subscriptions", { as: "permissive", for: "select", to: ["authenticated"], using: sql`true` }),
-]);
-
-export const newsletter = pgTable("newsletter", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	email: text().notNull(),
-	catalogueId: uuid("catalogue_id").notNull(),
-	ownerId: text("owner_id").notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.ownerId],
-			foreignColumns: [users.id],
-			name: "newsletter_owner_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
