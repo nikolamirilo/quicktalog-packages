@@ -41,6 +41,7 @@ export type BaseContentBlock = {
 
 export type DividerBlock = BaseContentBlock & {
   type: "divider";
+  name?: string;  
   spacing: number; // rem
   border?: {
     isEnabled: boolean;
@@ -68,16 +69,19 @@ export type ContainerBlock = BaseContentBlock & {
 
 export type EmbeddingBlock = BaseContentBlock & {
   type: "embedding";
+  name?: string;  
   code: string;
 };
 
 export type CustomCodeBlock = BaseContentBlock & {
   type: "custom_code";
+  name?: string;  
   code: string;
 };
 
 export type TextBlock = BaseContentBlock & {
   type: "text";
+  name?: string;  
   content: string;
 };
 
