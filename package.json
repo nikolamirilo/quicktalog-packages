@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "release": "npm version minor && git push --follow-tags",
     "prepare": "husky"
   },
   "devDependencies": {
