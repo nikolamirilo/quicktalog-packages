@@ -1,6 +1,14 @@
 {
   "name": "@quicktalog/common",
   "version": "1.52.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikolamirilo/quicktalog-packages.git"
+  },
+  "homepage": "https://github.com/nikolamirilo/quicktalog-packages#readme",
+  "bugs": {
+    "url": "https://github.com/nikolamirilo/quicktalog-packages/issues"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
