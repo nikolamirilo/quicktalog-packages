@@ -1,2 +1,17 @@
-npx drizzle-kit pull
+# Pull the drizzle schema only when a real DATABASE_URL is available.
+# CI and fresh clones have neither the env var nor a populated .env, and
+# drizzle-kit exits non-zero there, which would block every commit.
+if [ -z "$DATABASE_URL" ] && [ -f .env ]; then
+  DATABASE_URL=$(grep -E '^[[:space:]]*DATABASE_URL=' .env | head -n1 | cut -d= -f2- | tr -d '"'\''\r')
+fi
+
+case "$DATABASE_URL" in
+  *://*)
+    npx drizzle-kit pull
+    ;;
+  *)
+    echo "pre-commit: no usable DATABASE_URL, skipping drizzle-kit pull"
+    ;;
+esac
+
 npm run build
