@@ -124,6 +124,22 @@ export const qrConfigs = pgTable("qr_configs", {
 	unique("qr_configs_catalogue_key").on(table.catalogue),
 ]);
 
+export const userThemes = pgTable("user_themes", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: text("user_id").notNull(),
+	name: text().notNull(),
+	colors: jsonb().default({}).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "user_themes_user_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
+	unique("user_themes_user_id_name_key").on(table.userId, table.name),
+]);
+
 export const catalogues = pgTable("catalogues", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	name: text().notNull(),

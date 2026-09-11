@@ -28,6 +28,15 @@ export type Catalogue = Update<
   }
 >;
 
+type RawSavedTheme = InferSelectModel<typeof schema.userThemes>;
+
+export type SavedTheme = Update<
+  RawSavedTheme,
+  {
+    colors: CustomThemeColors;
+  }
+>;
+
 export type Metadata = {
   title: string;
   description: string;
@@ -118,10 +127,23 @@ export type Legal = {
   address: string;
 };
 
+export type CustomThemeColors = Partial<
+  Record<
+    | "background"
+    | "heading"
+    | "text"
+    | "primary"
+    | "secondary"
+    | "cardBackground",
+    string
+  >
+>;
+
 export type Appearance = {
   theme: {
     type: ThemeType;
     name: string;
+    colors?: CustomThemeColors;
   };
   style: {
     contentFontSize: FontSize;

@@ -44,6 +44,7 @@ export type PricingPlan = {
     apperance: {
       standardThemes: boolean;
       styles: boolean;
+      customThemes: boolean;
     };
   };
   billing_period?: "month" | "year";

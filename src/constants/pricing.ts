@@ -31,6 +31,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: false,
+        customThemes: false,
       },
     },
   },
@@ -63,6 +64,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: false,
+        customThemes: false,
       },
     },
   },
@@ -95,6 +97,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: true,
+        customThemes: true,
       },
     },
   },
@@ -127,6 +130,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: true,
+        customThemes: true,
       },
     },
   },
@@ -159,6 +163,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: true,
+        customThemes: true,
       },
     },
   },
@@ -191,6 +196,7 @@ export const tiers: PricingPlan[] = [
       apperance: {
         standardThemes: true,
         styles: true,
+        customThemes: true,
       },
     },
   },
