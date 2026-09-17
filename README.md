@@ -1,6 +1,6 @@
 # @quicktalog/common
 
-Shared TypeScript building blocks for the Quicktalog applications — published to npm and installed
+Shared TypeScript building blocks for the Quicktalog applications - published to npm and installed
 by every service that needs to agree on the same types, constants, helpers, and database schema.
 
 The goal is a single source of truth. When a catalogue gains a field or a pricing tier changes, it
@@ -26,8 +26,8 @@ declarations from `dist/`. Source lives in `src/` and is organised into four gro
 
 | Group | Path | Contents |
 | --- | --- | --- |
-| **Types** | `src/types/` | Domain models and unions — `Catalogue`, `ContentBlockType`, `Status`, `ThemeType`, `LimitType`, and friends |
-| **Constants** | `src/constants/` | Shared values — `themes`, `layouts`, `tiers`, `BUSINESS_TYPES`, `defaultCatalogueData` |
+| **Types** | `src/types/` | Domain models and unions - `Catalogue`, `ContentBlockType`, `Status`, `ThemeType`, `LimitType`, and friends |
+| **Constants** | `src/constants/` | Shared values - `themes`, `layouts`, `tiers`, `BUSINESS_TYPES`, `defaultCatalogueData` |
 | **Helpers** | `src/helpers/` | Small utilities such as `generateUniqueSlug` and `fetchImageFromUnsplash` |
 | **Drizzle** | `src/drizzle/` | The Postgres schema, exported as a `schema` namespace, plus generated relations |
 
@@ -49,16 +49,16 @@ A single Husky hook runs on commit:
 
 ```
 .husky/pre-commit
-  ├── npx drizzle-kit pull   (only when a real DATABASE_URL is available)
+  ├── npx drizzle-kit pull   (only when a real DB_CONNECTION_STRING is available)
   └── npm run build
 ```
 
-The drizzle step is guarded. It looks for `DATABASE_URL` in the environment, falls back to `.env`,
+The drizzle step is guarded. It looks for `DB_CONNECTION_STRING` in the environment, falls back to `.env`,
 and runs only if the value actually looks like a connection string. Without one it prints a skip
 notice and moves on, so fresh clones and CI can commit without a database. The build always runs,
 so a commit that does not typecheck cannot be created.
 
-There is deliberately **no pre-push hook**. Versioning is explicit — see below.
+There is deliberately **no pre-push hook**. Versioning is explicit - see below.
 
 > **Note:** when the drizzle step does run, it rewrites files under `src/drizzle/migrations/`
 > *after* staging has already happened. Those regenerated files land in your working tree unstaged;
@@ -91,7 +91,7 @@ Actions run shows up named after the release.
 2. `npm ci`
 3. `npm run build`
 4. **Check the registry** for the current `name@version`
-5. `npm publish --access public` — only if that version does not already exist
+5. `npm publish --access public` - only if that version does not already exist
 
 Step 4 is what keeps ordinary commits green. A docs or config push builds and verifies as usual,
 then skips publishing instead of failing on a version that is already taken. The job summary states
@@ -99,7 +99,7 @@ which path it took, so a green run never leaves you guessing whether it shipped.
 
 ### Authentication
 
-There is no npm token. Publishing uses **OIDC trusted publishing** — GitHub Actions proves its
+There is no npm token. Publishing uses **OIDC trusted publishing** - GitHub Actions proves its
 identity to npm directly, and npm attaches a signed [provenance](https://docs.npmjs.com/generating-provenance-statements)
 statement to each release.
 
@@ -108,6 +108,6 @@ provenance bundle against it and rejects the publish with `E422` if the two disa
 
 ## Conventions
 
-- **Never edit `package.json` version by hand** — use the release scripts so the tag and commit stay consistent
-- **Never hand-edit the generated Drizzle schema** — change the database and re-pull
+- **Never edit `package.json` version by hand** - use the release scripts so the tag and commit stay consistent
+- **Never hand-edit the generated Drizzle schema** - change the database and re-pull
 - `dist/` is gitignored and built by CI; only `src/` is tracked

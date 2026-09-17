@@ -12,7 +12,6 @@ export type Usage = {
 export type UserData = User & {
   usage: Usage;
   currentPlan: PricingPlan;
-  nextPlan: PricingPlan;
 };
 
 export type PricingPlan = {
