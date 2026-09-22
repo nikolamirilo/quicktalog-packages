@@ -1,4 +1,4 @@
-import { pgTable, uniqueIndex, foreignKey, check, text, jsonb, timestamp, uuid, index, unique, integer, boolean, bigserial, pgView } from "drizzle-orm/pg-core"
+import { pgTable, uniqueIndex, foreignKey, pgPolicy, check, text, jsonb, timestamp, uuid, index, unique, integer, boolean, bigserial, pgView } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -16,6 +16,11 @@ export const qrConfigs = pgTable("qr_configs", {
 			foreignColumns: [catalogues.name],
 			name: "qr_configs_catalogue_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
+	pgPolicy("qr_configs_owner", { as: "permissive", for: "all", to: ["app_user"], using: sql`(catalogue IN ( SELECT c.name
+   FROM catalogues c
+  WHERE (c.created_by = ( SELECT private.current_user_id() AS current_user_id))))`, withCheck: sql`(catalogue IN ( SELECT c.name
+   FROM catalogues c
+  WHERE (c.created_by = ( SELECT private.current_user_id() AS current_user_id))))`  }),
 	check("qr_configs_config_size", sql`pg_column_size(config) < 65536`),
 ]);
 
@@ -37,6 +42,7 @@ export const ocr = pgTable("ocr", {
 			foreignColumns: [users.id],
 			name: "ocr_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
+	pgPolicy("ocr_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 ]);
 
 export const userThemes = pgTable("user_themes", {
@@ -53,6 +59,7 @@ export const userThemes = pgTable("user_themes", {
 			name: "user_themes_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 	unique("user_themes_user_id_name_key").on(table.userId, table.name),
+	pgPolicy("user_themes_owner", { as: "permissive", for: "all", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))`, withCheck: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))`  }),
 	check("user_themes_colors_size", sql`pg_column_size(colors) < 4096`),
 ]);
 
@@ -82,6 +89,7 @@ export const prompts = pgTable("prompts", {
 			foreignColumns: [users.id],
 			name: "prompts_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
+	pgPolicy("prompts_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 	check("prompts_continuations_range", sql`(continuations >= 0) AND (continuations <= 1000)`),
 	check("prompts_kind_check", sql`kind = ANY (ARRAY['agent'::text, 'describe'::text])`),
 	check("prompts_plan_budget_range", sql`(plan_budget >= 0) AND (plan_budget <= 8)`),
@@ -106,6 +114,8 @@ export const users = pgTable("users", {
 			name: "users_plan_id_fkey"
 		}),
 	unique("users_customer_id_key").on(table.customerId),
+	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
+	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
 	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
 ]);
 
@@ -152,6 +162,11 @@ export const catalogues = pgTable("catalogues", {
 			name: "catalogues_new_created_by_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 	unique("catalogues_new_name_key").on(table.name),
+	pgPolicy("catalogues_delete_owner", { as: "permissive", for: "delete", to: ["app_user"], using: sql`(created_by = ( SELECT private.current_user_id() AS current_user_id))` }),
+	pgPolicy("catalogues_insert_owner", { as: "permissive", for: "insert", to: ["app_user"] }),
+	pgPolicy("catalogues_select_owner", { as: "permissive", for: "select", to: ["app_user"] }),
+	pgPolicy("catalogues_select_public", { as: "permissive", for: "select", to: ["app_public"] }),
+	pgPolicy("catalogues_update_owner", { as: "permissive", for: "update", to: ["app_user"] }),
 	check("catalogues_content_size", sql`pg_column_size(content) < 1048576`),
 	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
 	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
@@ -174,6 +189,7 @@ export const analytics = pgTable("analytics", {
 			name: "analytics_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 	unique("analytics_unique_entry").on(table.date, table.currentUrl),
+	pgPolicy("analytics_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 ]);
 
 export const newsletter = pgTable("newsletter", {
@@ -195,6 +211,7 @@ export const newsletter = pgTable("newsletter", {
 			foreignColumns: [users.id],
 			name: "newsletter_owner_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
+	pgPolicy("newsletter_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(owner_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 ]);
 
 export const subscriptions = pgTable("subscriptions", {
