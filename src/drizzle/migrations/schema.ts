@@ -1,47 +1,7 @@
-import { pgTable, index, foreignKey, unique, uuid, timestamp, text, jsonb, integer, bigserial, pgView } from "drizzle-orm/pg-core"
+import { pgTable, uniqueIndex, foreignKey, check, text, jsonb, timestamp, uuid, index, unique, integer, boolean, bigserial, pgView } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
-
-export const prompts = pgTable("prompts", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	userId: text("user_id"),
-	catalogue: text().notNull(),
-}, (table) => [
-	index("prompts_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.catalogue],
-			foreignColumns: [catalogues.name],
-			name: "prompts_catalogue_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "prompts_user_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-	unique("prompts_service_catalogue_key").on(table.catalogue),
-]);
-
-export const ocr = pgTable("ocr", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	userId: text("user_id"),
-	catalogue: text().notNull(),
-}, (table) => [
-	index("ocr_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
-	index("ocr_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.catalogue],
-			foreignColumns: [catalogues.name],
-			name: "ocr_catalogue_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "ocr_user_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-]);
 
 export const qrConfigs = pgTable("qr_configs", {
 	catalogue: text().notNull(),
@@ -50,11 +10,32 @@ export const qrConfigs = pgTable("qr_configs", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
 	id: uuid().defaultRandom().primaryKey().notNull(),
 }, (table) => [
-	index("qr_configs_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
+	uniqueIndex("qr_configs_catalogue_key").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
 	foreignKey({
 			columns: [table.catalogue],
 			foreignColumns: [catalogues.name],
 			name: "qr_configs_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
+	check("qr_configs_config_size", sql`pg_column_size(config) < 65536`),
+]);
+
+export const ocr = pgTable("ocr", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	userId: text("user_id").notNull(),
+	catalogue: text(),
+}, (table) => [
+	index("ocr_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
+	index("ocr_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.catalogue],
+			foreignColumns: [catalogues.name],
+			name: "ocr_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("set null"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "ocr_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
@@ -72,6 +53,39 @@ export const userThemes = pgTable("user_themes", {
 			name: "user_themes_user_id_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 	unique("user_themes_user_id_name_key").on(table.userId, table.name),
+	check("user_themes_colors_size", sql`pg_column_size(colors) < 4096`),
+]);
+
+export const prompts = pgTable("prompts", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	userId: text("user_id").notNull(),
+	catalogue: text(),
+	turnId: uuid("turn_id").defaultRandom().notNull(),
+	continuations: integer().default(0).notNull(),
+	refundedAt: timestamp("refunded_at", { withTimezone: true, mode: 'string' }),
+	kind: text().default('agent').notNull(),
+	planOpen: boolean("plan_open").default(false).notNull(),
+	planBudget: integer("plan_budget").default(0).notNull(),
+	planHash: text("plan_hash"),
+}, (table) => [
+	index("prompts_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
+	uniqueIndex("prompts_turn_id_key").using("btree", table.turnId.asc().nullsLast().op("uuid_ops")),
+	index("prompts_user_datetime_idx").using("btree", table.userId.asc().nullsLast().op("timestamptz_ops"), table.datetime.asc().nullsLast().op("timestamptz_ops")),
+	foreignKey({
+			columns: [table.catalogue],
+			foreignColumns: [catalogues.name],
+			name: "prompts_catalogue_fkey"
+		}).onUpdate("cascade").onDelete("set null"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "prompts_user_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
+	check("prompts_continuations_range", sql`(continuations >= 0) AND (continuations <= 1000)`),
+	check("prompts_kind_check", sql`kind = ANY (ARRAY['agent'::text, 'describe'::text])`),
+	check("prompts_plan_budget_range", sql`(plan_budget >= 0) AND (plan_budget <= 8)`),
+	check("prompts_plan_hash_format", sql`(plan_hash IS NULL) OR (plan_hash ~ '^[0-9a-f]{64}$'::text)`),
 ]);
 
 export const users = pgTable("users", {
@@ -92,7 +106,21 @@ export const users = pgTable("users", {
 			name: "users_plan_id_fkey"
 		}),
 	unique("users_customer_id_key").on(table.customerId),
+	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
 ]);
+
+export const productNewsletter = pgTable("product_newsletter", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	email: text().notNull(),
+}, (table) => [
+	uniqueIndex("product_newsletter_email_key").using("btree", sql`lower(email)`),
+]);
+
+export const plans = pgTable("plans", {
+	id: text().primaryKey().notNull(),
+	name: text().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+});
 
 export const catalogues = pgTable("catalogues", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
@@ -124,18 +152,11 @@ export const catalogues = pgTable("catalogues", {
 			name: "catalogues_new_created_by_fkey"
 		}).onUpdate("cascade").onDelete("cascade"),
 	unique("catalogues_new_name_key").on(table.name),
+	check("catalogues_content_size", sql`pg_column_size(content) < 1048576`),
+	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
+	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
+	check("catalogues_status_check", sql`status = ANY (ARRAY['active'::text, 'inactive'::text, 'draft'::text, 'in preparation'::text, 'error'::text])`),
 ]);
-
-export const productNewsletter = pgTable("product_newsletter", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	email: text().notNull(),
-});
-
-export const plans = pgTable("plans", {
-	id: text().primaryKey().notNull(),
-	name: text().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow(),
-});
 
 export const analytics = pgTable("analytics", {
 	date: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
@@ -162,7 +183,7 @@ export const newsletter = pgTable("newsletter", {
 	ownerId: text("owner_id").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	index("newsletter_catalogue_id_idx").using("btree", table.catalogueId.asc().nullsLast().op("uuid_ops")),
+	uniqueIndex("newsletter_catalogue_email_key").using("btree", sql`catalogue_id`, sql`lower(email)`),
 	index("newsletter_owner_id_idx").using("btree", table.ownerId.asc().nullsLast().op("text_ops")),
 	foreignKey({
 			columns: [table.catalogueId],

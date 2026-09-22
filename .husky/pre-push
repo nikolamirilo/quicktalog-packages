@@ -1,1 +1,2 @@
-npm version minor
+# No version bump here: `npm run release` already runs `npm version minor`,
+# and this hook used to bump a second time on the push that followed.

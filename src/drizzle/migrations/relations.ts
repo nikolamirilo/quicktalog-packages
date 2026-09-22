@@ -1,40 +1,22 @@
 import { relations } from "drizzle-orm/relations";
-import { catalogues, prompts, users, ocr, qrConfigs, userThemes, plans, analytics, newsletter, subscriptions } from "./schema";
+import { catalogues, qrConfigs, ocr, users, userThemes, prompts, plans, analytics, newsletter, subscriptions } from "./schema";
 
-export const promptsRelations = relations(prompts, ({one}) => ({
+export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
 	catalogue: one(catalogues, {
-		fields: [prompts.catalogue],
+		fields: [qrConfigs.catalogue],
 		references: [catalogues.name]
-	}),
-	user: one(users, {
-		fields: [prompts.userId],
-		references: [users.id]
 	}),
 }));
 
 export const cataloguesRelations = relations(catalogues, ({one, many}) => ({
-	prompts: many(prompts),
-	ocrs: many(ocr),
 	qrConfigs: many(qrConfigs),
+	ocrs: many(ocr),
+	prompts: many(prompts),
 	user: one(users, {
 		fields: [catalogues.createdBy],
 		references: [users.id]
 	}),
 	newsletters: many(newsletter),
-}));
-
-export const usersRelations = relations(users, ({one, many}) => ({
-	prompts: many(prompts),
-	ocrs: many(ocr),
-	userThemes: many(userThemes),
-	plan: one(plans, {
-		fields: [users.planId],
-		references: [plans.id]
-	}),
-	catalogues: many(catalogues),
-	analytics: many(analytics),
-	newsletters: many(newsletter),
-	subscriptions: many(subscriptions),
 }));
 
 export const ocrRelations = relations(ocr, ({one}) => ({
@@ -48,16 +30,34 @@ export const ocrRelations = relations(ocr, ({one}) => ({
 	}),
 }));
 
-export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
-	catalogue: one(catalogues, {
-		fields: [qrConfigs.catalogue],
-		references: [catalogues.name]
+export const usersRelations = relations(users, ({one, many}) => ({
+	ocrs: many(ocr),
+	userThemes: many(userThemes),
+	prompts: many(prompts),
+	plan: one(plans, {
+		fields: [users.planId],
+		references: [plans.id]
 	}),
+	catalogues: many(catalogues),
+	analytics: many(analytics),
+	newsletters: many(newsletter),
+	subscriptions: many(subscriptions),
 }));
 
 export const userThemesRelations = relations(userThemes, ({one}) => ({
 	user: one(users, {
 		fields: [userThemes.userId],
+		references: [users.id]
+	}),
+}));
+
+export const promptsRelations = relations(prompts, ({one}) => ({
+	catalogue: one(catalogues, {
+		fields: [prompts.catalogue],
+		references: [catalogues.name]
+	}),
+	user: one(users, {
+		fields: [prompts.userId],
 		references: [users.id]
 	}),
 }));
