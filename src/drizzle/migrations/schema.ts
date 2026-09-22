@@ -96,29 +96,6 @@ export const prompts = pgTable("prompts", {
 	check("prompts_plan_hash_format", sql`(plan_hash IS NULL) OR (plan_hash ~ '^[0-9a-f]{64}$'::text)`),
 ]);
 
-export const users = pgTable("users", {
-	id: text().primaryKey().notNull(),
-	name: text(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
-	image: text(),
-	email: text(),
-	planId: text("plan_id").notNull(),
-	customerId: text("customer_id"),
-	cookiePreferences: jsonb("cookie_preferences"),
-	consents: jsonb().default({"refund-policy":true,"privacy-policy":true,"terms-and-conditions":true}).notNull(),
-}, (table) => [
-	index("users_plan_id_idx").using("btree", table.planId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.planId],
-			foreignColumns: [plans.id],
-			name: "users_plan_id_fkey"
-		}),
-	unique("users_customer_id_key").on(table.customerId),
-	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
-	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
-	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
-]);
-
 export const productNewsletter = pgTable("product_newsletter", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	email: text().notNull(),
@@ -171,6 +148,30 @@ export const catalogues = pgTable("catalogues", {
 	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
 	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
 	check("catalogues_status_check", sql`status = ANY (ARRAY['active'::text, 'inactive'::text, 'draft'::text, 'in preparation'::text, 'error'::text])`),
+]);
+
+export const users = pgTable("users", {
+	id: text().primaryKey().notNull(),
+	name: text(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
+	image: text(),
+	email: text(),
+	planId: text("plan_id").notNull(),
+	customerId: text("customer_id"),
+	cookiePreferences: jsonb("cookie_preferences"),
+	consents: jsonb().default({"source":"default","refund-policy":false,"privacy-policy":false,"terms-and-conditions":false}).notNull(),
+	welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true, mode: 'string' }),
+}, (table) => [
+	index("users_plan_id_idx").using("btree", table.planId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.planId],
+			foreignColumns: [plans.id],
+			name: "users_plan_id_fkey"
+		}),
+	unique("users_customer_id_key").on(table.customerId),
+	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
+	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
+	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
 ]);
 
 export const analytics = pgTable("analytics", {
