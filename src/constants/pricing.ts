@@ -21,6 +21,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
+      ai_credits: 15,
       sections_per_catalogue: 5,
       sections: {
         divider: false,
@@ -59,6 +60,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 0,
+      ai_credits: 50,
       sections_per_catalogue: 8,
       items_per_catalogue: 30,
       apperance: {
@@ -87,6 +89,7 @@ export const tiers: PricingPlan[] = [
       custom_features: false,
       analytics: "Basic",
       ai_prompts: 10,
+      ai_credits: 150,
       sections: {
         divider: true,
         embedding: true,
@@ -125,6 +128,7 @@ export const tiers: PricingPlan[] = [
         customCode: true,
       },
       ai_prompts: 25,
+      ai_credits: 300,
       sections_per_catalogue: 30,
       items_per_catalogue: 200,
       apperance: {
@@ -158,6 +162,7 @@ export const tiers: PricingPlan[] = [
         customCode: true,
       },
       ai_prompts: 50,
+      ai_credits: 600,
       sections_per_catalogue: 50,
       items_per_catalogue: 300,
       apperance: {
@@ -191,6 +196,7 @@ export const tiers: PricingPlan[] = [
       },
       analytics: "Basic",
       ai_prompts: 0,
+      ai_credits: 50,
       sections_per_catalogue: 20,
       items_per_catalogue: 200,
       apperance: {
