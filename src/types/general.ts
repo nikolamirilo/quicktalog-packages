@@ -4,10 +4,6 @@ import { InferSelectModel, Update } from "drizzle-orm";
 
 export type Usage = {
   traffic: { pageview_count: number; unique_visitors: number };
-  /** @deprecated Always 0 - OCR runs in the browser and is never metered. */
-  ocr: number;
-  /** @deprecated Row count. Enforcement moved to `credits`; kept until the flip. */
-  prompts: number;
   credits: number;
   catalogues: number;
 };
@@ -38,12 +34,9 @@ export type PricingPlan = {
     };
     newsletter: boolean;
     custom_features: boolean;
-    ocr_ai_import: number;
     traffic_limit: number;
     branding: boolean;
     analytics: string;
-    /** @deprecated Superseded by `ai_credits`; kept until the flip. */
-    ai_prompts: number;
     ai_credits: number;
     apperance: {
       standardThemes: boolean;
@@ -121,10 +114,6 @@ export type Currency = {
 
 export type AreLimitesReached = {
   catalogues: boolean;
-  /** @deprecated Always false; retired with the OCR limit. */
-  ocr: boolean;
-  /** @deprecated Superseded by `credits`; kept until the flip. */
-  prompts: boolean;
   credits: boolean;
 };
 
