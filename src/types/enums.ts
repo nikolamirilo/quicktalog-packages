@@ -13,12 +13,6 @@ export type Status =
   | "in preparation"
   | "error";
 export type Source = "builder" | "ocr_import" | "ai_prompt";
-export type ContentBlockType =
-  | "category"
-  | "container"
-  | "embedding"
-  | "custom_code"
-  | "text";
 export type ThemeType = "standard" | "custom";
 export type FontSize = "small" | "medium" | "large";
 export type ShadowLevel = "none" | "low" | "medium" | "high";

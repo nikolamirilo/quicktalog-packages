@@ -61,6 +61,22 @@ export type DividerBlock = BaseContentBlock & {
   };
 };
 
+/**
+ * A section of priced items. Replaces the old `category`/`container` pair:
+ * a category was this with `showHeading`, a container was this without.
+ */
+export type ItemsBlock = BaseContentBlock & {
+  type: "items";
+  /** Always stored. Shown as the section heading only when `showHeading`. */
+  name: string;
+  showHeading: boolean;
+  /** Initial expanded state. Only reachable when `showHeading` - the heading is the toggle. */
+  isExpanded: boolean;
+  layout: ContentLayout;
+  items: Item[];
+};
+
+/** @deprecated Legacy shape, normalized to `ItemsBlock` on read. Do not write. */
 export type CategoryBlock = BaseContentBlock & {
   type: "category";
   name: string;
@@ -69,6 +85,7 @@ export type CategoryBlock = BaseContentBlock & {
   isExpanded: boolean;
 };
 
+/** @deprecated Legacy shape, normalized to `ItemsBlock` on read. Do not write. */
 export type ContainerBlock = BaseContentBlock & {
   type: "container";
   name: string;
@@ -95,12 +112,16 @@ export type TextBlock = BaseContentBlock & {
 };
 
 export type ContentBlock =
+  | ItemsBlock
   | CategoryBlock
   | ContainerBlock
   | EmbeddingBlock
   | CustomCodeBlock
   | TextBlock
   | DividerBlock;
+
+/** Every block that holds items, including the two legacy keys. */
+export type AnyItemsBlock = ItemsBlock | CategoryBlock | ContainerBlock;
 
 export type ItemDiscount = {
   isOnDiscount: boolean;
