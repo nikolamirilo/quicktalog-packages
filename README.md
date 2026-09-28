@@ -49,8 +49,9 @@ A single Husky hook runs on commit:
 
 ```
 .husky/pre-commit
-  ├── npx drizzle-kit pull   (only when a real DB_CONNECTION_STRING is available)
-  └── npm run build
+  ├── npx drizzle-kit pull        (only when a real DB_CONNECTION_STRING is available)
+  ├── npm run build
+  └── npm version minor           (staged into the commit being made)
 ```
 
 The drizzle step is guarded. It looks for `DB_CONNECTION_STRING` in the environment, falls back to `.env`,
@@ -58,7 +59,24 @@ and runs only if the value actually looks like a connection string. Without one 
 notice and moves on, so fresh clones and CI can commit without a database. The build always runs,
 so a commit that does not typecheck cannot be created.
 
-There is deliberately **no pre-push hook**. Versioning is explicit - see below.
+The bump runs last, after the build, and stages `package.json` and `package-lock.json` itself - so
+the version lands in the commit you are making even though you staged everything before it ran.
+Git has no `git add` hook, and this is the closest thing to one: the committed result is identical
+to bumping before staging.
+
+It is guarded too. The hook compares the version in the index against the version in `HEAD`, and
+bumps only when they match. A commit that already carries a version change - `npm version` stages
+its own bump and then commits, which re-enters this hook - is left alone, so a release never bumps
+twice.
+
+To commit without bumping (amending, fixing up, a docs-only change you do not want to ship):
+
+```bash
+SKIP_VERSION_BUMP=1 git commit -m "..."
+```
+
+There is deliberately **no pre-push hook**. It used to run `npm version minor` and collided with the
+release script, bumping every release a second time on the push that followed.
 
 > **Note:** when the drizzle step does run, it rewrites files under `src/drizzle/migrations/`
 > *after* staging has already happened. Those regenerated files land in your working tree unstaged;
@@ -69,19 +87,21 @@ There is deliberately **no pre-push hook**. Versioning is explicit - see below.
 Publishing is driven entirely by the version in `package.json`. Pushing to `main` is what triggers
 CI, but only a **new** version actually publishes.
 
+Because every commit bumps the minor version, the work of releasing is already done by the time you
+want to ship. `npm run release` only tags what is there and pushes:
+
 ```
 npm run release
-  ├── npm version minor         -> bumps package.json, commits it, tags it
-  │                                (the commit message is just the version, e.g. "1.53.0")
-  └── git push --follow-tags    -> pushes the commit and its tag
+  ├── git tag v<current version>   -> tags the version your commits already produced
+  └── git push --follow-tags       -> pushes the commits and the tag
 ```
 
-Use `npm run release:patch` or `npm run release:major` for the other bump types. `--follow-tags`
-matters: a plain `git push` leaves the tag stranded locally.
+`--follow-tags` matters: a plain `git push` leaves the tag stranded locally. `npm run release:patch`
+and `npm run release:major` are still there for the rarer shapes - they bump on top of what the
+hook produced, commit, and tag, which is what you want for a breaking change.
 
 Because the bump lives *inside* the commit being pushed, the version CI sees is always the version
-you intended to ship. The commit message being the bare version string is also why the GitHub
-Actions run shows up named after the release.
+you intended to ship.
 
 ### What CI does
 
@@ -93,9 +113,10 @@ Actions run shows up named after the release.
 4. **Check the registry** for the current `name@version`
 5. `npm publish --access public` - only if that version does not already exist
 
-Step 4 is what keeps ordinary commits green. A docs or config push builds and verifies as usual,
-then skips publishing instead of failing on a version that is already taken. The job summary states
-which path it took, so a green run never leaves you guessing whether it shipped.
+Step 4 is what keeps ordinary commits green. Most pushes to `main` carry a fresh version and do
+publish, but a re-run, a revert, or a commit made with `SKIP_VERSION_BUMP=1` builds and verifies as
+usual and then skips publishing instead of failing on a version that is already taken. The job
+summary states which path it took, so a green run never leaves you guessing whether it shipped.
 
 ### Authentication
 
@@ -108,6 +129,6 @@ provenance bundle against it and rejects the publish with `E422` if the two disa
 
 ## Conventions
 
-- **Never edit `package.json` version by hand** - use the release scripts so the tag and commit stay consistent
+- **Never edit `package.json` version by hand** - the pre-commit hook owns the bump; use the release scripts for anything larger
 - **Never hand-edit the generated Drizzle schema** - change the database and re-pull
 - `dist/` is gitignored and built by CI; only `src/` is tracked

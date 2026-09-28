@@ -1,6 +1,6 @@
 {
   "name": "@quicktalog/common",
-  "version": "1.61.0",
+  "version": "1.62.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nikolamirilo/quicktalog-packages.git"
@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "release": "npm version minor && git push --follow-tags",
+    "release": "git tag v$(npm pkg get version | tr -d '\"') && git push --follow-tags",
     "release:patch": "npm version patch && git push --follow-tags",
     "release:major": "npm version major && git push --follow-tags",
     "prepare": "husky"

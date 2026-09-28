@@ -15,3 +15,24 @@ case "$DB_CONNECTION_STRING" in
 esac
 
 npm run build
+
+# Bump last, so a commit that fails to build never leaves a stray version behind.
+if [ -n "$SKIP_VERSION_BUMP" ]; then
+  echo "pre-commit: SKIP_VERSION_BUMP set, leaving the version alone"
+elif ! git rev-parse -q --verify HEAD >/dev/null; then
+  echo "pre-commit: no HEAD yet, skipping version bump"
+else
+  read_version='JSON.parse(require("fs").readFileSync(0, "utf8")).version'
+  head_version=$(git show HEAD:package.json | node -pe "$read_version")
+  staged_version=$(git show :package.json | node -pe "$read_version")
+
+  # npm version stages its own bump and then commits, which re-enters this hook;
+  # a version already differing from HEAD means the commit carries one bump.
+  if [ "$head_version" = "$staged_version" ]; then
+    npm version minor --no-git-tag-version >/dev/null
+    git add package.json package-lock.json
+    echo "pre-commit: version $head_version -> $(node -p 'require("./package.json").version')"
+  else
+    echo "pre-commit: version already bumped to $staged_version, skipping"
+  fi
+fi
