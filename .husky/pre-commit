@@ -1,16 +1,16 @@
-# Pull the drizzle schema only when a real DB_CONNECTION_STRING is available.
+# Pull the drizzle schema only when a real DB_ADMIN_CONNECTION_STRING is available.
 # CI and fresh clones have neither the env var nor a populated .env, and
 # drizzle-kit exits non-zero there, which would block every commit.
-if [ -z "$DB_CONNECTION_STRING" ] && [ -f .env ]; then
-  DB_CONNECTION_STRING=$(grep -E '^[[:space:]]*DB_CONNECTION_STRING=' .env | head -n1 | cut -d= -f2- | tr -d '"'\''\r')
+if [ -z "$DB_ADMIN_CONNECTION_STRING" ] && [ -f .env ]; then
+  DB_ADMIN_CONNECTION_STRING=$(grep -E '^[[:space:]]*DB_ADMIN_CONNECTION_STRING=' .env | head -n1 | cut -d= -f2- | tr -d '"'\''\r')
 fi
 
-case "$DB_CONNECTION_STRING" in
+case "$DB_ADMIN_CONNECTION_STRING" in
   *://*)
     npx drizzle-kit pull
     ;;
   *)
-    echo "pre-commit: no usable DB_CONNECTION_STRING, skipping drizzle-kit pull"
+    echo "pre-commit: no usable DB_ADMIN_CONNECTION_STRING, skipping drizzle-kit pull"
     ;;
 esac
 
