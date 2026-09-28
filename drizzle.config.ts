@@ -1,3 +1,5 @@
+/// <reference types="node" />
+// This file is outside tsconfig `include`, so editors type-check it without @types/node unless referenced here.
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
@@ -5,7 +7,7 @@ export default defineConfig({
   schema: "./src/drizzle/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DB_CONNECTION_STRING!,
+    url: process.env.DB_ADMIN_CONNECTION_STRING!
   },
   // The app only ever queries `public`. `private` is reached through the
   // entry-point functions, and roles/policies are owned by the Supabase CLI

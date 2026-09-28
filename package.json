@@ -23,6 +23,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@types/node": "^26.6.3",
     "drizzle-kit": "^0.31.8",
     "husky": "^9.1.7",
     "tsx": "^4.21.0",
