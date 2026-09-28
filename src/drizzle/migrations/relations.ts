@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { catalogues, qrConfigs, ocr, users, userThemes, prompts, plans, analytics, newsletter, subscriptions } from "./schema";
+import { catalogues, qrConfigs, users, userThemes, prompts, plans, analytics, newsletter, subscriptions } from "./schema";
 
 export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
 	catalogue: one(catalogues, {
@@ -10,7 +10,6 @@ export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
 
 export const cataloguesRelations = relations(catalogues, ({one, many}) => ({
 	qrConfigs: many(qrConfigs),
-	ocrs: many(ocr),
 	prompts: many(prompts),
 	user: one(users, {
 		fields: [catalogues.createdBy],
@@ -19,19 +18,14 @@ export const cataloguesRelations = relations(catalogues, ({one, many}) => ({
 	newsletters: many(newsletter),
 }));
 
-export const ocrRelations = relations(ocr, ({one}) => ({
-	catalogue: one(catalogues, {
-		fields: [ocr.catalogue],
-		references: [catalogues.name]
-	}),
+export const userThemesRelations = relations(userThemes, ({one}) => ({
 	user: one(users, {
-		fields: [ocr.userId],
+		fields: [userThemes.userId],
 		references: [users.id]
 	}),
 }));
 
 export const usersRelations = relations(users, ({one, many}) => ({
-	ocrs: many(ocr),
 	userThemes: many(userThemes),
 	prompts: many(prompts),
 	catalogues: many(catalogues),
@@ -42,13 +36,6 @@ export const usersRelations = relations(users, ({one, many}) => ({
 	analytics: many(analytics),
 	newsletters: many(newsletter),
 	subscriptions: many(subscriptions),
-}));
-
-export const userThemesRelations = relations(userThemes, ({one}) => ({
-	user: one(users, {
-		fields: [userThemes.userId],
-		references: [users.id]
-	}),
 }));
 
 export const promptsRelations = relations(prompts, ({one}) => ({

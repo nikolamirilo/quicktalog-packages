@@ -1,4 +1,4 @@
-import { pgTable, uniqueIndex, foreignKey, pgPolicy, check, text, jsonb, timestamp, uuid, index, unique, integer, boolean, bigserial, pgView } from "drizzle-orm/pg-core"
+import { pgTable, uniqueIndex, foreignKey, pgPolicy, check, text, jsonb, timestamp, uuid, unique, index, integer, boolean, bigserial, pgView } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -22,27 +22,6 @@ export const qrConfigs = pgTable("qr_configs", {
    FROM catalogues c
   WHERE (c.created_by = ( SELECT private.current_user_id() AS current_user_id))))`  }),
 	check("qr_configs_config_size", sql`pg_column_size(config) < 65536`),
-]);
-
-export const ocr = pgTable("ocr", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	datetime: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	userId: text("user_id").notNull(),
-	catalogue: text(),
-}, (table) => [
-	index("ocr_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
-	index("ocr_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.catalogue],
-			foreignColumns: [catalogues.name],
-			name: "ocr_catalogue_fkey"
-		}).onUpdate("cascade").onDelete("set null"),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "ocr_user_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-	pgPolicy("ocr_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 ]);
 
 export const userThemes = pgTable("user_themes", {
@@ -75,6 +54,8 @@ export const prompts = pgTable("prompts", {
 	planOpen: boolean("plan_open").default(false).notNull(),
 	planBudget: integer("plan_budget").default(0).notNull(),
 	planHash: text("plan_hash"),
+	credits: integer().default(1).notNull(),
+	metadata: jsonb(),
 }, (table) => [
 	index("prompts_catalogue_idx").using("btree", table.catalogue.asc().nullsLast().op("text_ops")),
 	uniqueIndex("prompts_turn_id_key").using("btree", table.turnId.asc().nullsLast().op("uuid_ops")),
@@ -91,6 +72,7 @@ export const prompts = pgTable("prompts", {
 		}).onUpdate("cascade").onDelete("cascade"),
 	pgPolicy("prompts_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 	check("prompts_continuations_range", sql`(continuations >= 0) AND (continuations <= 1000)`),
+	check("prompts_credits_range", sql`(credits >= 0) AND (credits <= 100)`),
 	check("prompts_kind_check", sql`kind = ANY (ARRAY['agent'::text, 'describe'::text])`),
 	check("prompts_plan_budget_range", sql`(plan_budget >= 0) AND (plan_budget <= 8)`),
 	check("prompts_plan_hash_format", sql`(plan_hash IS NULL) OR (plan_hash ~ '^[0-9a-f]{64}$'::text)`),
@@ -172,6 +154,7 @@ export const users = pgTable("users", {
 	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
 	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
 	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
+	check("users_id_is_uuid", sql`id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'::text)) NOT VALID`),
 ]);
 
 export const analytics = pgTable("analytics", {
