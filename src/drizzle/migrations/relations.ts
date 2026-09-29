@@ -1,21 +1,43 @@
 import { relations } from "drizzle-orm/relations";
-import { catalogues, qrConfigs, users, userThemes, prompts, plans, analytics, newsletter, subscriptions } from "./schema";
+import { users, aiCredits, catalogues, plans, userThemes, analytics, catalogueSubscribers, qrConfigs, subscriptions } from "./schema";
 
-export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
+export const aiCreditsRelations = relations(aiCredits, ({one}) => ({
+	user: one(users, {
+		fields: [aiCredits.userId],
+		references: [users.id]
+	}),
 	catalogue: one(catalogues, {
-		fields: [qrConfigs.catalogue],
-		references: [catalogues.name]
+		fields: [aiCredits.catalogueId],
+		references: [catalogues.id]
 	}),
 }));
 
+export const usersRelations = relations(users, ({one, many}) => ({
+	aiCredits: many(aiCredits),
+	catalogues: many(catalogues),
+	plan: one(plans, {
+		fields: [users.planId],
+		references: [plans.id]
+	}),
+	userThemes: many(userThemes),
+	analytics: many(analytics),
+	subscriptions: many(subscriptions),
+}));
+
 export const cataloguesRelations = relations(catalogues, ({one, many}) => ({
-	qrConfigs: many(qrConfigs),
-	prompts: many(prompts),
+	aiCredits: many(aiCredits),
 	user: one(users, {
-		fields: [catalogues.createdBy],
+		fields: [catalogues.userId],
 		references: [users.id]
 	}),
-	newsletters: many(newsletter),
+	analytics: many(analytics),
+	catalogueSubscribers: many(catalogueSubscribers),
+	qrConfigs: many(qrConfigs),
+}));
+
+export const plansRelations = relations(plans, ({many}) => ({
+	users: many(users),
+	subscriptions: many(subscriptions),
 }));
 
 export const userThemesRelations = relations(userThemes, ({one}) => ({
@@ -25,50 +47,28 @@ export const userThemesRelations = relations(userThemes, ({one}) => ({
 	}),
 }));
 
-export const usersRelations = relations(users, ({one, many}) => ({
-	userThemes: many(userThemes),
-	prompts: many(prompts),
-	catalogues: many(catalogues),
-	plan: one(plans, {
-		fields: [users.planId],
-		references: [plans.id]
-	}),
-	analytics: many(analytics),
-	newsletters: many(newsletter),
-	subscriptions: many(subscriptions),
-}));
-
-export const promptsRelations = relations(prompts, ({one}) => ({
-	catalogue: one(catalogues, {
-		fields: [prompts.catalogue],
-		references: [catalogues.name]
-	}),
-	user: one(users, {
-		fields: [prompts.userId],
-		references: [users.id]
-	}),
-}));
-
-export const plansRelations = relations(plans, ({many}) => ({
-	users: many(users),
-	subscriptions: many(subscriptions),
-}));
-
 export const analyticsRelations = relations(analytics, ({one}) => ({
 	user: one(users, {
 		fields: [analytics.userId],
 		references: [users.id]
 	}),
-}));
-
-export const newsletterRelations = relations(newsletter, ({one}) => ({
 	catalogue: one(catalogues, {
-		fields: [newsletter.catalogueId],
+		fields: [analytics.catalogueId],
 		references: [catalogues.id]
 	}),
-	user: one(users, {
-		fields: [newsletter.ownerId],
-		references: [users.id]
+}));
+
+export const catalogueSubscribersRelations = relations(catalogueSubscribers, ({one}) => ({
+	catalogue: one(catalogues, {
+		fields: [catalogueSubscribers.catalogueId],
+		references: [catalogues.id]
+	}),
+}));
+
+export const qrConfigsRelations = relations(qrConfigs, ({one}) => ({
+	catalogue: one(catalogues, {
+		fields: [qrConfigs.catalogueId],
+		references: [catalogues.id]
 	}),
 }));
 

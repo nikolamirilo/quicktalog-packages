@@ -3,7 +3,7 @@ import { layouts, themes } from "../constants";
 import { InferSelectModel, Update } from "drizzle-orm";
 
 export type Usage = {
-  traffic: { pageview_count: number; unique_visitors: number };
+  traffic: { pageviews: number; unique_visitors: number };
   credits: number;
   catalogues: number;
 };
@@ -68,9 +68,9 @@ export type OverallAnalytics = {
 };
 
 export type Analytics = {
-  date: string;
-  current_url: string;
-  pageview_count: number;
+  day: string;
+  catalogue_id: string | null;
+  pageviews: number;
   unique_visitors: number;
 };
 

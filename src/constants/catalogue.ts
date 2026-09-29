@@ -70,7 +70,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
     newsletter: false,
     showPartners: false,
   },
-  createdBy: "",
+  userId: "",
   createdAt: new Date().toString(),
   updatedAt: new Date().toString(),
   source: "builder",

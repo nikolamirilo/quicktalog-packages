@@ -9,7 +9,7 @@ export type Status =
   | "active"
   | "inactive"
   | "draft"
-  | "in preparation"
+  | "in_preparation"
   | "error";
 export type Source = "builder" | "ocr_import" | "ai_prompt";
 export type ThemeType = "standard" | "custom";
