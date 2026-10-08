@@ -99,10 +99,47 @@ export type EmbeddingBlock = BaseContentBlock & {
   code: string;
 };
 
+/**
+ * Author-written HTML/CSS/JS - a banner, an animation, a small interactive
+ * object. Rendered inside a sandboxed frame with an opaque origin, so the
+ * fragment can animate and lay itself out but can reach no cookie, storage or
+ * parent DOM. Analytics belongs in `TrackingBlock`, which runs same-origin.
+ */
+export type CustomVisualBlock = BaseContentBlock & {
+  type: "custom_visual";
+  name?: string;
+  code: string;
+};
+
+/** @deprecated Renamed to `custom_visual`. Normalized on read. Do not write. */
 export type CustomCodeBlock = BaseContentBlock & {
   type: "custom_code";
   name?: string;  
   code: string;
+};
+
+/**
+ * Providers the analytics block can load. A closed set on purpose: the block
+ * stores an id, never a snippet, and the app builds the tag from a template.
+ */
+export type TrackingProvider =
+  | "ga4"
+  | "gtm"
+  | "meta_pixel"
+  | "hotjar"
+  | "clarity";
+
+/**
+ * A third-party analytics tag. Unlike every other block this renders nothing;
+ * it is configuration that the published page collects and loads once the
+ * visitor has consented. `trackingId` is the only author-controlled value, and
+ * it is validated against the provider's pattern again at render.
+ */
+export type TrackingBlock = BaseContentBlock & {
+  type: "tracking";
+  name?: string;
+  provider: TrackingProvider;
+  trackingId: string;
 };
 
 export type TextBlock = BaseContentBlock & {
@@ -116,7 +153,9 @@ export type ContentBlock =
   | CategoryBlock
   | ContainerBlock
   | EmbeddingBlock
+  | CustomVisualBlock
   | CustomCodeBlock
+  | TrackingBlock
   | TextBlock
   | DividerBlock;
 

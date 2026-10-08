@@ -27,10 +27,15 @@ export type PricingPlan = {
     catalogues: number;
     sections_per_catalogue?: number | "unlimited";
     items_per_catalogue?: number | "unlimited";
+    /**
+     * Which block types the plan unlocks. Read as `=== true` everywhere, so a
+     * tier that omits a flag does not get the block.
+     */
     sections: {
       divider: boolean;
       embedding: boolean;
-      customCode: boolean;
+      customVisual: boolean;
+      tracking: boolean;
     };
     newsletter: boolean;
     custom_features: boolean;
