@@ -25,6 +25,8 @@ export const tiers: PricingPlan[] = [
         divider: false,
         embedding: false,
         customVisual: false,
+      },
+      integrations: {
         tracking: false,
       },
       items_per_catalogue: 15,
@@ -53,6 +55,8 @@ export const tiers: PricingPlan[] = [
         divider: true,
         embedding: false,
         customVisual: false,
+      },
+      integrations: {
         tracking: false,
       },
       branding: true,
@@ -90,6 +94,8 @@ export const tiers: PricingPlan[] = [
         divider: true,
         embedding: true,
         customVisual: true,
+      },
+      integrations: {
         tracking: false,
       },
       sections_per_catalogue: 15,
@@ -122,6 +128,8 @@ export const tiers: PricingPlan[] = [
         divider: true,
         embedding: true,
         customVisual: true,
+      },
+      integrations: {
         tracking: true,
       },
       ai_credits: 300,
@@ -155,6 +163,8 @@ export const tiers: PricingPlan[] = [
         divider: true,
         embedding: true,
         customVisual: true,
+      },
+      integrations: {
         tracking: true,
       },
       ai_credits: 600,
@@ -187,6 +197,8 @@ export const tiers: PricingPlan[] = [
         divider: true,
         embedding: true,
         customVisual: true,
+      },
+      integrations: {
         tracking: true,
       },
       analytics: "Basic",

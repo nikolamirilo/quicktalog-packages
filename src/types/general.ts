@@ -35,6 +35,14 @@ export type PricingPlan = {
       divider: boolean;
       embedding: boolean;
       customVisual: boolean;
+    };
+    /**
+     * Third-party services the owner may connect to a published catalogue.
+     * `tracking` covers their own GA4 and Meta Pixel tags. Google Tag Manager
+     * is deliberately absent: a container is arbitrary owner-authored code,
+     * and published catalogues share an origin with the signed-in app.
+     */
+    integrations: {
       tracking: boolean;
     };
     newsletter: boolean;

@@ -41,6 +41,18 @@ export type Metadata = {
   title: string;
   description: string;
   icon: string;
+  /**
+   * The owner's own GA4 Measurement ID ("G-XXXXXXXXXX"). Loaded on the
+   * published page only after the visitor allows analytics.
+   *
+   * Stored here rather than in a column of its own because `metadata` is
+   * already public-readable and owner-editable, so this needs no migration.
+   * It arrives from the client like the rest of `metadata`, so the shape is
+   * checked on save and again at render.
+   */
+  googleAnalyticsId?: string;
+  /** The owner's own Meta Pixel ID (digits only). Same handling as above. */
+  metaPixelId?: string;
 };
 
 export type BaseContentBlock = {
@@ -103,7 +115,8 @@ export type EmbeddingBlock = BaseContentBlock & {
  * Author-written HTML/CSS/JS - a banner, an animation, a small interactive
  * object. Rendered inside a sandboxed frame with an opaque origin, so the
  * fragment can animate and lay itself out but can reach no cookie, storage or
- * parent DOM. Analytics belongs in `TrackingBlock`, which runs same-origin.
+ * parent DOM. Analytics is not a block at all: it is a catalogue setting
+ * (`Metadata.googleAnalyticsId`), because a tag has to run same-origin.
  */
 export type CustomVisualBlock = BaseContentBlock & {
   type: "custom_visual";
@@ -116,30 +129,6 @@ export type CustomCodeBlock = BaseContentBlock & {
   type: "custom_code";
   name?: string;  
   code: string;
-};
-
-/**
- * Providers the analytics block can load. A closed set on purpose: the block
- * stores an id, never a snippet, and the app builds the tag from a template.
- */
-export type TrackingProvider =
-  | "ga4"
-  | "gtm"
-  | "meta_pixel"
-  | "hotjar"
-  | "clarity";
-
-/**
- * A third-party analytics tag. Unlike every other block this renders nothing;
- * it is configuration that the published page collects and loads once the
- * visitor has consented. `trackingId` is the only author-controlled value, and
- * it is validated against the provider's pattern again at render.
- */
-export type TrackingBlock = BaseContentBlock & {
-  type: "tracking";
-  name?: string;
-  provider: TrackingProvider;
-  trackingId: string;
 };
 
 export type TextBlock = BaseContentBlock & {
@@ -155,7 +144,6 @@ export type ContentBlock =
   | EmbeddingBlock
   | CustomVisualBlock
   | CustomCodeBlock
-  | TrackingBlock
   | TextBlock
   | DividerBlock;
 
