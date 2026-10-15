@@ -29,11 +29,11 @@ export const userThemesRelations = relations(userThemes, ({one}) => ({
 export const usersRelations = relations(users, ({one, many}) => ({
 	userThemes: many(userThemes),
 	aiCredits: many(aiCredits),
+	catalogues: many(catalogues),
 	plan: one(plans, {
 		fields: [users.planId],
 		references: [plans.id]
 	}),
-	catalogues: many(catalogues),
 	analytics: many(analytics),
 	subscriptions: many(subscriptions),
 }));

@@ -78,32 +78,6 @@ export const aiCredits = pgTable("ai_credits", {
 	check("ai_credits_plan_hash_format", sql`(plan_hash IS NULL) OR (plan_hash ~ '^[0-9a-f]{64}$'::text)`),
 ]);
 
-export const users = pgTable("users", {
-	id: text().primaryKey().notNull(),
-	name: text(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	image: text(),
-	email: text(),
-	planId: text("plan_id").notNull(),
-	customerId: text("customer_id"),
-	cookiePreferences: jsonb("cookie_preferences"),
-	consents: jsonb().default({"source":"default","refund-policy":false,"privacy-policy":false,"terms-and-conditions":false}).notNull(),
-	welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true, mode: 'string' }),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	index("users_plan_id_idx").using("btree", table.planId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.planId],
-			foreignColumns: [plans.id],
-			name: "users_plan_id_fkey"
-		}),
-	unique("users_customer_id_key").on(table.customerId),
-	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
-	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
-	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
-	check("users_id_is_uuid", sql`id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'::text)) NOT VALID`),
-]);
-
 export const plans = pgTable("plans", {
 	id: text().primaryKey().notNull(),
 	name: text().notNull(),
@@ -158,6 +132,34 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	uniqueIndex("newsletter_subscribers_email_key").using("btree", sql`lower(email)`),
+]);
+
+export const users = pgTable("users", {
+	id: text().primaryKey().notNull(),
+	name: text(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	image: text(),
+	email: text(),
+	planId: text("plan_id").notNull(),
+	customerId: text("customer_id"),
+	cookiePreferences: jsonb("cookie_preferences"),
+	consents: jsonb().default({"source":"default","refund-policy":false,"privacy-policy":false,"terms-and-conditions":false}).notNull(),
+	welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true, mode: 'string' }),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	acquisitionSource: text("acquisition_source"),
+}, (table) => [
+	index("users_plan_id_idx").using("btree", table.planId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.planId],
+			foreignColumns: [plans.id],
+			name: "users_plan_id_fkey"
+		}),
+	unique("users_customer_id_key").on(table.customerId),
+	pgPolicy("users_select_self", { as: "permissive", for: "select", to: ["app_user"], using: sql`(id = ( SELECT private.current_user_id() AS current_user_id))` }),
+	pgPolicy("users_update_self", { as: "permissive", for: "update", to: ["app_user"] }),
+	check("users_acquisition_source_length", sql`(acquisition_source IS NULL) OR ((length(acquisition_source) >= 1) AND (length(acquisition_source) <= 120))`),
+	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
+	check("users_id_is_uuid", sql`id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'::text)) NOT VALID`),
 ]);
 
 export const analytics = pgTable("analytics", {
