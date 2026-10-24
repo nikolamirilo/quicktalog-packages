@@ -35,6 +35,17 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
       isEnabled: false,
       icon: "",
     },
+    glass: {
+      level: 0,
+      opacity: null,
+      frost: null,
+      splay: null,
+      apply: { navbar: true, search: true, headers: true, cards: true },
+    },
+    search: {
+      isEnabled: false,
+      placeholder: "",
+    },
   },
   contact: {
     phone: "",
@@ -69,6 +80,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
     },
     newsletter: false,
     showPartners: false,
+    tagline: "",
   },
   userId: "",
   createdAt: new Date().toString(),

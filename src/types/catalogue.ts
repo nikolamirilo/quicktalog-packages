@@ -203,6 +203,33 @@ export type Appearance = {
     isEnabled: boolean;
     icon: string;
   };
+  /** Optional: catalogues saved before it existed read as level 0 (off). */
+  glass?: GlassSettings;
+  /** Optional: catalogues saved before it existed read as disabled. */
+  search?: CatalogueSearch;
+};
+
+/** 0 off, 1 clear, 2 semi-frosted, 3 frosted. */
+export type GlassLevel = 0 | 1 | 2 | 3;
+
+export type GlassTarget = "navbar" | "search" | "headers" | "cards";
+
+/**
+ * See-through surfaces. `opacity` (%), `frost` (blur px) and `splay` (edge
+ * light px) override the level's preset; `null` keeps the preset.
+ */
+export type GlassSettings = {
+  level: GlassLevel;
+  opacity: number | null;
+  frost: number | null;
+  splay: number | null;
+  apply: Record<GlassTarget, boolean>;
+};
+
+/** The opt-in search bar under the catalogue heading. */
+export type CatalogueSearch = {
+  isEnabled: boolean;
+  placeholder: string;
 };
 
 export type CTAButton = {
@@ -222,6 +249,8 @@ export type Footer = {
   cta: CTAButton;
   newsletter: boolean;
   showPartners: boolean;
+  /** One line under the logo in a custom footer. */
+  tagline?: string;
   logoSize: {
     width: number;
     height: number;
