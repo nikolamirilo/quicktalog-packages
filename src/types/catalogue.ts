@@ -207,6 +207,25 @@ export type Appearance = {
   glass?: GlassSettings;
   /** Optional: catalogues saved before it existed read as disabled. */
   search?: CatalogueSearch;
+  /** Optional: catalogues saved before it existed show the theme background. */
+  background?: CatalogueBackground;
+};
+
+export type CatalogueBackgroundType = "image" | "gradient" | "color";
+
+/**
+ * A page background that replaces the theme's. Each type keeps its own value,
+ * so switching type and back doesn't lose the owner's pick. `gradient` is a
+ * key from the app's gradient library; `fade` (0-80 %) blends a photo into
+ * the theme background.
+ */
+export type CatalogueBackground = {
+  isEnabled: boolean;
+  type: CatalogueBackgroundType;
+  gradient: string;
+  color: string;
+  image: string | null;
+  fade: number;
 };
 
 /** 0 off, 1 clear, 2 semi-frosted, 3 frosted. */

@@ -46,6 +46,14 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
       isEnabled: false,
       placeholder: "",
     },
+    background: {
+      isEnabled: false,
+      type: "gradient",
+      gradient: "oat",
+      color: "#f6f1e9",
+      image: null,
+      fade: 35,
+    },
   },
   contact: {
     phone: "",
