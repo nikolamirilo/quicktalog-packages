@@ -87,48 +87,6 @@ export const plans = pgTable("plans", {
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });
 
-export const catalogues = pgTable("catalogues", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	name: text().notNull(),
-	logo: text(),
-	heading: text(),
-	status: text().default('draft').notNull(),
-	source: text().default('builder').notNull(),
-	language: text().default('eng').notNull(),
-	currency: text().default('EUR').notNull(),
-	businessType: text("business_type"),
-	content: jsonb().default([]).notNull(),
-	legal: jsonb().default({}).notNull(),
-	appearance: jsonb().default({}).notNull(),
-	contact: jsonb().default({}).notNull(),
-	header: jsonb().default({}).notNull(),
-	footer: jsonb().default({}).notNull(),
-	partners: jsonb().default([]).notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	userId: text("user_id").notNull(),
-	metadata: jsonb().default({}).notNull(),
-	tags: text().array().default([""]).notNull(),
-}, (table) => [
-	index("catalogues_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [users.id],
-			name: "catalogues_user_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-	unique("catalogues_name_key").on(table.name),
-	pgPolicy("catalogues_delete_owner", { as: "permissive", for: "delete", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
-	pgPolicy("catalogues_insert_owner", { as: "permissive", for: "insert", to: ["app_user"] }),
-	pgPolicy("catalogues_select_owner", { as: "permissive", for: "select", to: ["app_user"] }),
-	pgPolicy("catalogues_select_public", { as: "permissive", for: "select", to: ["app_public"] }),
-	pgPolicy("catalogues_update_owner", { as: "permissive", for: "update", to: ["app_user"] }),
-	check("catalogues_content_size", sql`pg_column_size(content) < 1048576`),
-	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
-	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
-	check("catalogues_source_check", sql`source = ANY (ARRAY['builder'::text, 'ocr_import'::text, 'ai_prompt'::text])`),
-	check("catalogues_status_check", sql`status = ANY (ARRAY['draft'::text, 'in_preparation'::text, 'active'::text, 'inactive'::text, 'error'::text])`),
-]);
-
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	email: text().notNull(),
@@ -163,6 +121,46 @@ export const users = pgTable("users", {
 	check("users_acquisition_source_length", sql`(acquisition_source IS NULL) OR ((length(acquisition_source) >= 1) AND (length(acquisition_source) <= 120))`),
 	check("users_cookie_prefs_size", sql`(cookie_preferences IS NULL) OR (pg_column_size(cookie_preferences) < 2048)`),
 	check("users_id_is_uuid", sql`id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'::text)) NOT VALID`),
+]);
+
+export const catalogues = pgTable("catalogues", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	name: text().notNull(),
+	logo: text(),
+	heading: text(),
+	status: text().default('draft').notNull(),
+	language: text().default('eng').notNull(),
+	currency: text().default('EUR').notNull(),
+	businessType: text("business_type"),
+	content: jsonb().default([]).notNull(),
+	legal: jsonb().default({}).notNull(),
+	appearance: jsonb().default({}).notNull(),
+	contact: jsonb().default({}).notNull(),
+	header: jsonb().default({}).notNull(),
+	footer: jsonb().default({}).notNull(),
+	partners: jsonb().default([]).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	userId: text("user_id").notNull(),
+	metadata: jsonb().default({}).notNull(),
+	tags: text().array().default([""]).notNull(),
+}, (table) => [
+	index("catalogues_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "catalogues_user_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
+	unique("catalogues_name_key").on(table.name),
+	pgPolicy("catalogues_delete_owner", { as: "permissive", for: "delete", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
+	pgPolicy("catalogues_insert_owner", { as: "permissive", for: "insert", to: ["app_user"] }),
+	pgPolicy("catalogues_select_owner", { as: "permissive", for: "select", to: ["app_user"] }),
+	pgPolicy("catalogues_select_public", { as: "permissive", for: "select", to: ["app_public"] }),
+	pgPolicy("catalogues_update_owner", { as: "permissive", for: "update", to: ["app_user"] }),
+	check("catalogues_content_size", sql`pg_column_size(content) < 1048576`),
+	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
+	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
+	check("catalogues_status_check", sql`status = ANY (ARRAY['draft'::text, 'in_preparation'::text, 'active'::text, 'inactive'::text, 'error'::text])`),
 ]);
 
 export const analytics = pgTable("analytics", {
