@@ -124,13 +124,6 @@ export type CustomVisualBlock = BaseContentBlock & {
   code: string;
 };
 
-/** @deprecated Renamed to `custom_visual`. Normalized on read. Do not write. */
-export type CustomCodeBlock = BaseContentBlock & {
-  type: "custom_code";
-  name?: string;  
-  code: string;
-};
-
 export type TextBlock = BaseContentBlock & {
   type: "text";
   name?: string;  
@@ -143,7 +136,6 @@ export type ContentBlock =
   | ContainerBlock
   | EmbeddingBlock
   | CustomVisualBlock
-  | CustomCodeBlock
   | TextBlock
   | DividerBlock;
 

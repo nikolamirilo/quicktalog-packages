@@ -33,3 +33,4 @@ export const generateUniqueSlug = (name: string) => {
 
   return slug;
 };
+export * from "./plan-fit";
