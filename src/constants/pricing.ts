@@ -30,11 +30,7 @@ export const tiers: PricingPlan[] = [
         tracking: false,
       },
       items_per_catalogue: 15,
-      apperance: {
-        standardThemes: true,
-        styles: false,
-        customThemes: false,
-      },
+      advancedAppearance: false,
     },
   },
   {
@@ -65,11 +61,7 @@ export const tiers: PricingPlan[] = [
       ai_credits: 50,
       sections_per_catalogue: 8,
       items_per_catalogue: 30,
-      apperance: {
-        standardThemes: true,
-        styles: false,
-        customThemes: false,
-      },
+      advancedAppearance: false,
     },
   },
   {
@@ -100,11 +92,7 @@ export const tiers: PricingPlan[] = [
       },
       sections_per_catalogue: 15,
       items_per_catalogue: 100,
-      apperance: {
-        standardThemes: true,
-        styles: true,
-        customThemes: true,
-      },
+      advancedAppearance: true,
     },
   },
   {
@@ -135,11 +123,7 @@ export const tiers: PricingPlan[] = [
       ai_credits: 300,
       sections_per_catalogue: 30,
       items_per_catalogue: 200,
-      apperance: {
-        standardThemes: true,
-        styles: true,
-        customThemes: true,
-      },
+      advancedAppearance: true,
     },
   },
   {
@@ -170,11 +154,7 @@ export const tiers: PricingPlan[] = [
       ai_credits: 600,
       sections_per_catalogue: 50,
       items_per_catalogue: 300,
-      apperance: {
-        standardThemes: true,
-        styles: true,
-        customThemes: true,
-      },
+      advancedAppearance: true,
     },
   },
   {
@@ -205,11 +185,7 @@ export const tiers: PricingPlan[] = [
       ai_credits: 50,
       sections_per_catalogue: 20,
       items_per_catalogue: 200,
-      apperance: {
-        standardThemes: true,
-        styles: true,
-        customThemes: true,
-      },
+      advancedAppearance: true,
     },
   },
 ];

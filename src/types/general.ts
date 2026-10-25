@@ -51,11 +51,11 @@ export type PricingPlan = {
     branding: boolean;
     analytics: string;
     ai_credits: number;
-    apperance: {
-      standardThemes: boolean;
-      styles: boolean;
-      customThemes: boolean;
-    };
+    /**
+     * Custom colour themes, fonts, text size, corners, shadows, overlay, glass
+     * and background. Standard themes are on every plan, so they are not a flag.
+     */
+    advancedAppearance: boolean;
   };
   billing_period?: "month" | "year";
 };
