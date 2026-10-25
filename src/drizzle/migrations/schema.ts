@@ -56,6 +56,8 @@ export const aiCredits = pgTable("ai_credits", {
 	credits: integer().default(1).notNull(),
 	metadata: jsonb(),
 	catalogueId: uuid("catalogue_id"),
+	held: integer().default(0).notNull(),
+	heldUntil: timestamp("held_until", { withTimezone: true, mode: 'string' }),
 }, (table) => [
 	index("ai_credits_catalogue_id_idx").using("btree", table.catalogueId.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("ai_credits_turn_id_key").using("btree", table.turnId.asc().nullsLast().op("uuid_ops")),
@@ -73,6 +75,7 @@ export const aiCredits = pgTable("ai_credits", {
 	pgPolicy("ai_credits_select_owner", { as: "permissive", for: "select", to: ["app_user"], using: sql`(user_id = ( SELECT private.current_user_id() AS current_user_id))` }),
 	check("ai_credits_continuations_range", sql`(continuations >= 0) AND (continuations <= 1000)`),
 	check("ai_credits_credits_range", sql`(credits >= 0) AND (credits <= 100)`),
+	check("ai_credits_held_range", sql`(held >= 0) AND (held <= 100)`),
 	check("ai_credits_kind_check", sql`kind = ANY (ARRAY['agent'::text, 'describe'::text])`),
 	check("ai_credits_plan_budget_range", sql`(plan_budget >= 0) AND (plan_budget <= 8)`),
 	check("ai_credits_plan_hash_format", sql`(plan_hash IS NULL) OR (plan_hash ~ '^[0-9a-f]{64}$'::text)`),
