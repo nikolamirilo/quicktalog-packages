@@ -4,7 +4,6 @@ import {
   ContentLayout,
   FontSize,
   ShadowLevel,
-  Source,
   Status,
   ThemeType,
 } from "./enums";
@@ -16,7 +15,6 @@ export type Catalogue = Update<
   RawCatalogue,
   {
     status: Status;
-    source: Source;
     content: ContentBlock[];
     legal: Legal;
     appearance: Appearance;

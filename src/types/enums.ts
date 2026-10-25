@@ -11,7 +11,6 @@ export type Status =
   | "draft"
   | "in_preparation"
   | "error";
-export type Source = "builder" | "ocr_import" | "ai_prompt";
 export type ThemeType = "standard" | "custom";
 export type FontSize = "small" | "medium" | "large";
 export type ShadowLevel = "none" | "low" | "medium" | "high";

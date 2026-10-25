@@ -93,7 +93,6 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
   userId: "",
   createdAt: new Date().toString(),
   updatedAt: new Date().toString(),
-  source: "builder",
   tags: [],
   partners: [],
 };

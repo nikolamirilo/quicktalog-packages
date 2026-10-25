@@ -93,7 +93,6 @@ export const catalogues = pgTable("catalogues", {
 	logo: text(),
 	heading: text(),
 	status: text().default('draft').notNull(),
-	source: text().default('builder').notNull(),
 	language: text().default('eng').notNull(),
 	currency: text().default('EUR').notNull(),
 	businessType: text("business_type"),
@@ -125,7 +124,6 @@ export const catalogues = pgTable("catalogues", {
 	check("catalogues_content_size", sql`pg_column_size(content) < 1048576`),
 	check("catalogues_name_slug", sql`(name ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text) AND (length(name) <= 100)`),
 	check("catalogues_other_json_size", sql`(((((((COALESCE(pg_column_size(appearance), 0) + COALESCE(pg_column_size(legal), 0)) + COALESCE(pg_column_size(contact), 0)) + COALESCE(pg_column_size(header), 0)) + COALESCE(pg_column_size(footer), 0)) + COALESCE(pg_column_size(partners), 0)) + COALESCE(pg_column_size(metadata), 0)) + COALESCE(pg_column_size(tags), 0)) < 1048576`),
-	check("catalogues_source_check", sql`source = ANY (ARRAY['builder'::text, 'ocr_import'::text, 'ai_prompt'::text])`),
 	check("catalogues_status_check", sql`status = ANY (ARRAY['draft'::text, 'in_preparation'::text, 'active'::text, 'inactive'::text, 'error'::text])`),
 ]);
 
