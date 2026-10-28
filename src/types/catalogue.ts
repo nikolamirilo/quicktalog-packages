@@ -264,6 +264,8 @@ export type Footer = {
     width: number;
     height: number;
   };
+  /** Corner rounding of the logo, 0-50 % of its size. Optional: older catalogues read as square. */
+  logoRadius?: number;
 };
 
 export type Header = {
@@ -275,6 +277,8 @@ export type Header = {
     width: number;
     height: number;
   };
+  /** Corner rounding of the logo, 0-50 % of its size. Optional: older catalogues read as square. */
+  logoRadius?: number;
 };
 
 export type Contact = {
