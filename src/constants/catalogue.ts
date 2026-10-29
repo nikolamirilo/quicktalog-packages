@@ -67,6 +67,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
       width: 100,
       height: 100,
     },
+    logoScale: 100,
     logoRadius: 0,
     cta: {
       isEnabled: true,
@@ -82,6 +83,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
       width: 100,
       height: 100,
     },
+    logoScale: 100,
     logoRadius: 0,
     cta: {
       isEnabled: true,

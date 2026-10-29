@@ -6,6 +6,11 @@ export type Usage = {
   traffic: { pageviews: number; unique_visitors: number };
   credits: number;
   catalogues: number;
+  /**
+   * The 30-day window the counts above were taken in, as ISO strings.
+   * `end` is when the allowance resets. See `usagePeriod()`.
+   */
+  period: { start: string; end: string };
 };
 
 export type UserData = User & {

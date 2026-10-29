@@ -260,11 +260,14 @@ export type Footer = {
   showPartners: boolean;
   /** One line under the logo in a custom footer. */
   tagline?: string;
+  /** @deprecated Superseded by `logoScale`; kept so stored catalogues still parse. */
   logoSize: {
     width: number;
     height: number;
   };
-  /** Corner rounding of the logo, 0-50 % of its size. Optional: older catalogues read as square. */
+  /** How big the logo draws, 10-100 % of what the place allows. Optional: older catalogues read as 100. */
+  logoScale?: number;
+  /** Corner rounding of the logo, 0-100 % of fully round. Optional: older catalogues read as square. */
   logoRadius?: number;
 };
 
@@ -273,11 +276,14 @@ export type Header = {
   cta: CTAButton;
   emailCta: boolean;
   phoneCta: boolean;
+  /** @deprecated Superseded by `logoScale`; kept so stored catalogues still parse. */
   logoSize: {
     width: number;
     height: number;
   };
-  /** Corner rounding of the logo, 0-50 % of its size. Optional: older catalogues read as square. */
+  /** How big the logo draws, 10-100 % of what the place allows. Optional: older catalogues read as 100. */
+  logoScale?: number;
+  /** Corner rounding of the logo, 0-100 % of fully round. Optional: older catalogues read as square. */
   logoRadius?: number;
 };
 
