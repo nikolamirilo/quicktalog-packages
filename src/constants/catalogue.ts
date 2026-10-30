@@ -99,6 +99,7 @@ export const defaultCatalogueData: Omit<Catalogue, "id"> = {
   updatedAt: new Date().toString(),
   tags: [],
   partners: [],
+  trafficOffAt: null,
 };
 
 export const BUSINESS_TYPES = [

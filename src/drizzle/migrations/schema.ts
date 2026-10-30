@@ -144,7 +144,9 @@ export const catalogues = pgTable("catalogues", {
 	userId: text("user_id").notNull(),
 	metadata: jsonb().default({}).notNull(),
 	tags: text().array().default([""]).notNull(),
+	trafficOffAt: timestamp("traffic_off_at", { withTimezone: true, mode: 'string' }),
 }, (table) => [
+	index("catalogues_traffic_off_at_idx").using("btree", table.trafficOffAt.asc().nullsLast().op("timestamptz_ops")).where(sql`(traffic_off_at IS NOT NULL)`),
 	index("catalogues_user_id_idx").using("btree", table.userId.asc().nullsLast().op("text_ops")),
 	foreignKey({
 			columns: [table.userId],
